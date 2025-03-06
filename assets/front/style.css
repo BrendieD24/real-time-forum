@@ -1,0 +1,85 @@
+body {
+    transition: background 0.3s, color 0.3s;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    align-items: center;
+}
+
+.light-mode {
+    background-color: rgb(247, 119, 0);
+    .header {
+        color: rgb(0, 0, 0);
+        text-align: center;
+        padding: 20px;
+        font-size: 2em;
+        text-shadow: 3px 3px 0px #ffffff;
+    }
+    .forum-container {
+        width: 80%;
+        margin: 20px auto;
+        padding: 20px;
+        background: #fff;
+        border: 5px solid #000;
+        box-shadow: 10px 10px 0px #000;
+    }
+    .thread {
+        background-image: url(/real-time-forum/assets/img/popart\ theme\ claire.jpeg);
+        margin: 10px 0;
+        padding: 10px;
+        border: 3px solid #000;
+        box-shadow: 5px 5px 0px #000;
+    }
+    .thread h2{
+    margin: 0;
+    font-size: 1.5em;
+    color: #000000;
+    text-shadow: 2px 2px 0px #ffffff;
+    }
+    .thread p {
+        font-size: 1em;
+        color: #000;
+    }
+    #toggle-theme{
+        background-color: #000000;
+        border-radius: 20px;
+    }
+}
+
+.dark-mode {
+    background-color: #250558;
+    .header {
+        color: rgb(235, 178, 23);
+        text-align: center;
+        padding: 20px;
+        font-size: 2em;
+        text-shadow: 3px 3px 0px #000000;
+    }
+    .forum-container {
+        width: 80%;
+        margin: 20px auto;
+        padding: 20px;
+        background: #aa32ce;
+        border: 5px solid #000000;
+        box-shadow: 10px 10px 0px #000000;
+    }
+    .thread {
+        background: #0a5c70;
+        margin: 10px 0;
+        padding: 10px;
+        border: 3px solid #000000;
+        box-shadow: 5px 5px 0px #000000;
+    }
+    .thread h2{
+        margin: 0;
+        font-size: 1.5em;
+        color: rgb(235, 178, 23);
+        text-shadow: 2px 2px 0px #000000;
+        }
+    .thread p {
+        font-size: 1em;
+        color: rgb(235, 178, 23);
+    }
+    #toggle-theme{
+        background-color: #fff;
+        border-radius: 20px;
+    }
+}
