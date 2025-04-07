@@ -1,0 +1,30 @@
+{{define "welcome"}}
+    {{template "layout" .}}
+
+    {{block "content" .}}
+        <h1>Bienvenue sur le Forum Temps Réel 👋</h1>
+        <p>Participez aux discussions, envoyez des messages privés, et plus encore.</p>
+        <a href="/login"><button>Se connecter</button></a>
+        <a href="/register"><button>S'inscrire</button></a>
+        
+    {{end}}
+{{end}}
+<style>
+    body { font-family: sans-serif; margin: 0; padding: 0; }
+    header { background: #333; color: white; padding: 1em; }
+    nav a { color: white; margin-right: 1em; text-decoration: none; }
+    .container { padding: 2em; }
+
+    button {
+        padding: 0.6em 1.2em;
+        margin: 0.5em;
+        background-color: #333;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #555;
+    }
+</style>
+

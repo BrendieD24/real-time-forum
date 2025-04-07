@@ -1,0 +1,27 @@
+{{define "layout"}}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{block "title" .}}Forum Temps Réel{{end}}</title>
+    <style>
+        body { font-family: sans-serif; margin: 0; padding: 0; }
+        header { background: #333; color: white; padding: 1em; }
+        nav a { color: white; margin-right: 1em; text-decoration: none; }
+        .container { padding: 2em; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/">Accueil</a>
+            <a href="/logout">Se déconnecter</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        {{block "content" .}}{{end}}
+    </div>
+</body>
+</html>
+{{end}}

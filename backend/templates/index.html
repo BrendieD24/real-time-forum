@@ -1,0 +1,10 @@
+{{define "index"}}
+    {{template "layout" .}}
+
+    {{block "title" .}}Accueil{{end}}
+
+    {{block "content" .}}
+        <h2>Bienvenue, {{.Pseudo}} !</h2>
+        <p>Contenu principal ici...</p>
+    {{end}}
+{{end}}
