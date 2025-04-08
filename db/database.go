@@ -32,4 +32,19 @@ func InitDB(path string) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	createPostTable := `
+	CREATE TABLE IF NOT EXISTS posts (
+	id TEXT PRIMARY KEY,
+	author_id TEXT,
+	title TEXT,
+	content TEXT,
+	category TEXT,
+	created_at TEXT,
+	FOREIGN KEY(author_id) REFERENCES users(id)
+	);`
+	_, err = DB.Exec(createPostTable)
+	if err != nil {
+		log.Fatal("Erreur création table posts:", err)
+	}
 }

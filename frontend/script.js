@@ -6,6 +6,26 @@ function showSection(sectionId) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Cacher le bouton "Créer un post" tant que non connecté
+  document.getElementById("createPostBtn").style.display = "none";
+
+  // 🔄 Charger les posts dès le départ + détecter l'utilisateur
+  getConnectedUser().then((user) => {
+    if (user) {
+      handleUserLoggedIn(user);
+      document.getElementById("post-author")?.remove();
+
+      // Montrer le bouton déconnexion
+      const logoutBtn = document.getElementById("logoutBtn");
+      logoutBtn.style.display = "inline-block";
+      logoutBtn.addEventListener("click", async () => {
+        await fetch("/logout");
+        location.reload(); // Recharge la page pour réinitialiser l'état
+      });
+    }
+    loadPosts();
+  });
+
   document.getElementById("registerBtn").addEventListener("click", async () => {
     const nickname = document.getElementById("reg-nickname").value.trim();
     const email = document.getElementById("reg-email").value.trim();
@@ -97,15 +117,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const msgBox = document.getElementById("login-msg");
     msgBox.innerText = await res.text();
     msgBox.style.color = res.ok ? "pink" : "black";
+
+    // 🔄 Si connexion réussie : récupérer utilisateur + mettre à jour l'UI
+    if (res.ok) {
+      const user = await getConnectedUser();
+      if (user) handleUserLoggedIn(user);
+    }
   });
   document.getElementById("postBtn").addEventListener("click", async () => {
     const title = document.getElementById("post-title").value.trim();
     const content = document.getElementById("post-content").value.trim();
     const category = document.getElementById("post-category").value;
-    const authorID = document.getElementById("post-author").value.trim();
     const msgBox = document.getElementById("post-msg");
 
-    if (!title || !content || !category || !authorID) {
+    if (!title || !content || !category) {
       msgBox.innerText = "Tous les champs sont obligatoires.";
       msgBox.style.color = "red";
       return;
@@ -117,8 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
       body: JSON.stringify({
         Title: title,
         Content: content,
-        Category: category,
-        AuthorID: authorID
+        Category: category
       })
     });
 
@@ -132,28 +156,62 @@ document.addEventListener("DOMContentLoaded", () => {
       loadPosts();
     }
   });
-
-  // Charger tous les posts
-  async function loadPosts() {
-    const res = await fetch("/posts/all");
-    const posts = await res.json();
-    const container = document.getElementById("post-list");
-
-    container.innerHTML = "";
-    posts.forEach((post) => {
-      const div = document.createElement("div");
-      div.classList.add("thread");
-      div.innerHTML = `
-        <h3>${post.Title}</h3>
-        <p><strong>Catégorie :</strong> ${post.Category}</p>
-        <p>${post.Content}</p>
-        <small>Posté le ${post.CreatedAt} par ${post.AuthorID}</small>
-        <hr>
-      `;
-      container.appendChild(div);
-    });
-  }
-
-  // Charger les posts au démarrage
-  loadPosts();
 });
+// 🧠 Déclarées globalement maintenant :
+async function loadPosts() {
+  const res = await fetch("/posts/all");
+  const posts = await res.json();
+  const container = document.getElementById("post-list");
+
+  container.innerHTML = "";
+  posts.forEach((post) => {
+    const div = document.createElement("div");
+    div.classList.add("thread");
+    div.innerHTML = `
+      <h3>${post.Title}</h3>
+      <p><strong>Catégorie :</strong> ${post.Category}</p>
+      <p>${post.Content}</p>
+      <small>Posté le ${post.CreatedAt} par ${post.AuthorID}</small>
+      <hr>
+    `;
+    container.appendChild(div);
+  });
+}
+async function getConnectedUser() {
+  const res = await fetch("/me");
+  if (!res.ok) return null;
+
+  const user = await res.json();
+  console.log("Utilisateur connecté :", user);
+  return user;
+}
+
+function handleUserLoggedIn(user) {
+  document.getElementById("section-login").style.display = "none";
+  document.getElementById("section-register").style.display = "none";
+  document.getElementById("section-create-post").style.display = "none";
+  document.getElementById("createPostBtn").style.display = "inline-block";
+
+  // Masquer boutons login/inscription
+  document.querySelector(
+    "button[onclick=\"showSection('login')\"]"
+  ).style.display = "none";
+  document.querySelector(
+    "button[onclick=\"showSection('register')\"]"
+  ).style.display = "none";
+
+  // Afficher bouton déconnexion
+  const logoutBtn = document.getElementById("logoutBtn");
+  logoutBtn.style.display = "inline-block";
+  logoutBtn.addEventListener("click", async () => {
+    await fetch("/logout");
+    location.reload();
+  });
+
+  // Message de bienvenue avec le nickname
+  const header = document.querySelector(".header");
+  const welcome = document.createElement("span");
+  welcome.id = "welcome-msg";
+  welcome.textContent = ` 👋 Salut, ${user.Nickname}`;
+  header.appendChild(welcome);
+}

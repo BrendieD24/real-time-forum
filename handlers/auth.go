@@ -55,22 +55,71 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		Identifier string
 		Password   string
 	}
-	json.NewDecoder(r.Body).Decode(&creds)
+	// Décodage du JSON de la requête
+	if err := json.NewDecoder(r.Body).Decode(&creds); err != nil {
+		http.Error(w, "Erreur JSON", http.StatusBadRequest)
+		return
+	}
 
-	row := db.DB.QueryRow("SELECT password FROM users WHERE nickname = ? OR email = ?", creds.Identifier, creds.Identifier)
+	// Récupération de l'ID et du mot de passe hashé correspondant à l'identifiant (nickname ou email)
+	row := db.DB.QueryRow("SELECT id, password FROM users WHERE nickname = ? OR email = ?", creds.Identifier, creds.Identifier)
 
-	var hashed string
-	err := row.Scan(&hashed)
-	if err != nil {
+	var id, hashed string
+	if err := row.Scan(&id, &hashed); err != nil {
 		http.Error(w, "Utilisateur introuvable", http.StatusUnauthorized)
 		return
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(hashed), []byte(creds.Password))
-	if err != nil {
+	// Comparaison du mot de passe en clair avec le hash stocké
+	if err := bcrypt.CompareHashAndPassword([]byte(hashed), []byte(creds.Password)); err != nil {
 		http.Error(w, "Mot de passe incorrect", http.StatusUnauthorized)
 		return
 	}
 
+	// Si tout est OK, définir le cookie avec l'ID de l'utilisateur
+	http.SetCookie(w, &http.Cookie{
+		Name:     "session_id",
+		Value:    id,
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   false, // Mets true en production avec HTTPS
+	})
+
 	w.Write([]byte("Connexion réussie"))
+}
+
+func MeHandler(w http.ResponseWriter, r *http.Request) {
+	userID, err := GetConnectedUserID(r)
+	if err != nil {
+		http.Error(w, "Non connecté", http.StatusUnauthorized)
+		return
+	}
+
+	// On récupère les infos de l'utilisateur
+	row := db.DB.QueryRow("SELECT id, nickname, firstname, lastname, email FROM users WHERE id = ?", userID)
+	var user struct {
+		ID        string `json:"id"`
+		Nickname  string `json:"nickname"`
+		FirstName string `json:"firstname"`
+		LastName  string `json:"lastname"`
+		Email     string `json:"email"`
+	}
+	err = row.Scan(&user.ID, &user.Nickname, &user.FirstName, &user.LastName, &user.Email)
+	if err != nil {
+		http.Error(w, "Utilisateur introuvable", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(user)
+}
+func LogoutHandler(w http.ResponseWriter, r *http.Request) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     "session_id",
+		Value:    "",
+		Path:     "/",
+		MaxAge:   -1, // supprime le cookie
+		HttpOnly: true,
+	})
+	w.Write([]byte("Déconnecté"))
 }
