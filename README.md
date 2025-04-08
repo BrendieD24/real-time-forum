@@ -1,4 +1,4 @@
-![Real-Time Forum Banner](image.png)
+![Real-Time Forum Banner](Image.png)
 
 # 🗨️ Real-Time Forum
 
