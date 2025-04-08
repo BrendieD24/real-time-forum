@@ -34,11 +34,61 @@
                 </div>
             </div>
         </div>
-    </div>
-    <h2>Chat Temps Réel</h2>
-    <input id="username" type="text" placeholder="Votre nom">
-    <input id="message" type="text" placeholder="Message">
-    <button onclick="sendMessage()">Envoyer</button>
-    <ul id="messages"></ul>
+    <!-- Navigation -->
+<div class="nav-buttons">
+    <button onclick="showSection('register')">Inscription</button>
+    <button onclick="showSection('login')">Connexion</button>
+    <button onclick="showSection('create-post')">Créer un post</button>
+  </div>
+  
+  <!-- Section : Inscription -->
+  <div id="section-register" class="section" style="display:none">
+    <h2>Inscription</h2>
+    <input type="text" id="reg-nickname" placeholder="Pseudo">
+    <input type="text" id="reg-email" placeholder="Email">
+    <input type="password" id="reg-password" placeholder="Mot de passe">
+    <input type="text" id="reg-firstname" placeholder="Prénom">
+    <input type="text" id="reg-lastname" placeholder="Nom">
+    <input type="number" id="reg-age" placeholder="Âge" min="0" oninput="this.value = Math.max(this.value, 0)">
+    <select id="reg-gender">
+      <option value="male">Homme</option>
+      <option value="female">Femme</option>
+      <option value="other">Autre</option>
+    </select>
+    <button id="registerBtn">S'inscrire</button>
+    <div id="register-msg"></div>
+  </div>
+  
+  <!-- Section : Connexion -->
+  <div id="section-login" class="section" style="display:none">
+    <h2>Connexion</h2>
+    <input type="text" id="login-id" placeholder="Pseudo ou Email">
+    <input type="password" id="login-pwd" placeholder="Mot de passe">
+    <button id="loginBtn">Se connecter</button>
+    <div id="login-msg"></div>
+  </div>
+  
+  <!-- Section : Créer un post -->
+  <div id="section-create-post" class="section" style="display:none">
+    <h2>Créer un Post</h2>
+    <input type="text" id="post-title" placeholder="Titre">
+    <textarea id="post-content" placeholder="Contenu du post"></textarea>
+    <select id="post-category">
+      <option value="général">Général</option>
+      <option value="questions">Questions</option>
+      <option value="infos">Infos</option>
+    </select>
+    <input type="text" id="post-author" placeholder="ID de l'utilisateur (temporaire)">
+    <button id="postBtn">Publier</button>
+    <div id="post-msg"></div>
+  </div>
+  
+  <!-- Liste des posts -->
+  <div id="post-list"></div>
+  
+
+    <div id="app"></div>
+  <script src="script.js"></script>
+  <script src="page.js"></script>
 </body>
 </html>
