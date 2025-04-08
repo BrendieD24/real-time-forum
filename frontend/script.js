@@ -212,6 +212,6 @@ function handleUserLoggedIn(user) {
   const header = document.querySelector(".header");
   const welcome = document.createElement("span");
   welcome.id = "welcome-msg";
-  welcome.textContent = ` 👋 Salut, ${user.Nickname}`;
+  welcome.textContent = ` 👋 Salut, ${user.nickname}`;
   header.appendChild(welcome);
 }
