@@ -132,5 +132,8 @@ Ce projet est libre d'utilisation pour un usage éducatif.
 
 ## 👨‍💻 Auteur
 
-Réalisé par brendie.D dans le cadre d’un exercice de ma formation chez Zone01, afin d’approfondir mes connaissances en développement web en temps réel.
+Réalisé par brendie Delamare et Mohammed Soumare dans le cadre d’un exercice de ma formation chez Zone01, afin d’approfondir mes connaissances en développement web en temps réel.
+
+[brendie Delamare](https://github.com/BrendieD24)
+[Mohammed Soumare](https://github.com/Salinkcha)
 
