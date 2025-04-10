@@ -16,6 +16,8 @@ func main() {
 	http.HandleFunc("/posts/all", handlers.GetPostsHandler)
 	http.HandleFunc("/me", handlers.MeHandler)
 	http.HandleFunc("/logout", handlers.LogoutHandler)
+	http.HandleFunc("/comments", handlers.CreateCommentHandler)
+	http.HandleFunc("/comments/all", handlers.GetCommentsHandler)
 
 	// Sert les fichiers frontend statiques (index.html, .js, .css)
 	http.Handle("/", http.FileServer(http.Dir("./frontend")))

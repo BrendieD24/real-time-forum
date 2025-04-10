@@ -47,4 +47,17 @@ func InitDB(path string) {
 	if err != nil {
 		log.Fatal("Erreur création table posts:", err)
 	}
+	_, err = DB.Exec(`
+	CREATE TABLE IF NOT EXISTS comments (
+	id TEXT PRIMARY KEY,
+	post_id TEXT,
+	author_id TEXT,
+	content TEXT,
+	created_at TEXT
+	);
+	`)
+	if err != nil {
+		log.Fatal("Erreur création table comments :", err)
+	}
+
 }

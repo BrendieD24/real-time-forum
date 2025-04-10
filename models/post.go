@@ -1,10 +1,10 @@
 package models
 
 type Post struct {
-	ID        string
-	AuthorID  string
-	Title     string
-	Content   string
-	Category  string
-	CreatedAt string
+	ID        string `json:"ID"`
+	Author    string `json:"Author"` // nickname ici
+	Title     string `json:"Title"`
+	Content   string `json:"Content"`
+	Category  string `json:"Category"`
+	CreatedAt string `json:"CreatedAt"`
 }

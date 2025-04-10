@@ -49,7 +49,12 @@ func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetPostsHandler(w http.ResponseWriter, r *http.Request) {
-	rows, err := db.DB.Query("SELECT id, author_id, title, content, category, created_at FROM posts ORDER BY created_at DESC")
+	rows, err := db.DB.Query(`
+	SELECT posts.id, users.nickname, posts.title, posts.content, posts.category, posts.created_at
+	FROM posts
+	JOIN users ON posts.author_id = users.id
+	ORDER BY posts.created_at DESC
+  `)
 	if err != nil {
 		http.Error(w, "Erreur récupération des posts", http.StatusInternalServerError)
 		return
@@ -59,7 +64,7 @@ func GetPostsHandler(w http.ResponseWriter, r *http.Request) {
 	var posts []models.Post
 	for rows.Next() {
 		var p models.Post
-		err := rows.Scan(&p.ID, &p.AuthorID, &p.Title, &p.Content, &p.Category, &p.CreatedAt)
+		err := rows.Scan(&p.ID, &p.Author, &p.Title, &p.Content, &p.Category, &p.CreatedAt)
 		if err != nil {
 			continue
 		}

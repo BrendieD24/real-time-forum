@@ -19,8 +19,8 @@
 
   <!-- Navigation -->
   <div class="nav-buttons">
-    <button onclick="showSection('register')">Inscription</button>
-    <button onclick="showSection('login')">Connexion</button>
+    <button id="register" onclick="showSection('register')">Inscription</button>
+    <button id="login" onclick="showSection('login')">Connexion</button>
     <button id="createPostBtn" onclick="showSection('create-post')">Créer un post</button>
     <button id="logoutBtn" style="display: none;">Se déconnecter</button>
   </div>
@@ -70,6 +70,8 @@
   <!-- Liste des posts -->
   <div class="forum-container">
     <div id="post-list"></div>
+    <div id="post-detail" style="display: none;"></div>
+
   </div>
 
   <div id="app"></div>
