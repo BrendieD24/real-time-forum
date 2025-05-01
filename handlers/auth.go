@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"real-time-forum/db"
 	"real-time-forum/models"
+	"real-time-forum/utils"
 
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
@@ -86,10 +87,17 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	})
 
 	w.Write([]byte("Connexion réussie"))
+
+	// Marquer l'utilisateur comme actif
+	_, _ = db.DB.Exec(`
+	INSERT INTO sessions(user_id, last_seen) VALUES(?, datetime('now'))
+	ON CONFLICT(user_id) DO UPDATE SET last_seen = datetime('now')
+	`, id)
+
 }
 
 func MeHandler(w http.ResponseWriter, r *http.Request) {
-	userID, err := GetConnectedUserID(r)
+	userID, err := utils.GetConnectedUserID(r)
 	if err != nil {
 		http.Error(w, "Non connecté", http.StatusUnauthorized)
 		return

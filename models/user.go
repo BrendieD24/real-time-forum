@@ -9,4 +9,5 @@ type User struct {
 	Gender    string
 	Email     string
 	Password  string
+	Online    bool `json:"online"`
 }

@@ -319,3 +319,34 @@ body {
     cursor: pointer;
     transition: transform 0.2s ease;
   }
+  
+
+  .main-layout {
+  display: flex;
+}
+
+#user-sidebar {
+  width: 200px;
+  min-height: 100vh;
+  padding: 1rem;
+  background-color: #112233;
+  color: white;
+  font-family: VT323;
+  border-right: 2px solid black;
+}
+
+#user-sidebar h3 {
+  margin-top: 0;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+#user-sidebar-list {
+  list-style: none;
+  padding: 0;
+}
+
+#user-sidebar-list li {
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+}

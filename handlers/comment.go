@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"real-time-forum/db"
 	"real-time-forum/models"
+	"real-time-forum/utils"
 	"time"
 
 	"github.com/google/uuid"
@@ -16,7 +17,7 @@ func CreateCommentHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userID, err := GetConnectedUserID(r)
+	userID, err := utils.GetConnectedUserID(r)
 	if err != nil {
 		http.Error(w, "Non connecté", http.StatusForbidden)
 		return

@@ -1,8 +1,19 @@
+let refreshUsersInterval;
+
 function showSection(sectionId) {
   const sections = document.querySelectorAll(".section");
   sections.forEach((sec) => {
     sec.style.display = sec.id === `section-${sectionId}` ? "block" : "none";
   });
+
+  // 🟢 Si on va dans la messagerie → charger les utilisateurs et activer le refresh
+  if (sectionId === "messagerie") {
+    loadUsersForChat();
+    refreshUsersInterval = setInterval(loadUsersForChat, 5000); // toutes les 10s
+  } else {
+    // Sinon → on arrête le rafraîchissement
+    clearInterval(refreshUsersInterval);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -156,6 +167,8 @@ document.addEventListener("DOMContentLoaded", () => {
       loadPosts();
     }
   });
+  updateUserSidebar();
+  setInterval(updateUserSidebar, 5000); // 🔁 refresh every 5s
 });
 
 // 🧠 Déclarées globalement maintenant :
@@ -344,4 +357,40 @@ async function loadComments(postID, ulElement) {
     li.textContent = `${c.Author} (${c.CreatedAt}) : ${c.Content}`;
     ulElement.appendChild(li);
   });
+}
+async function loadUsersForChat() {
+  const res = await fetch("/users/status");
+  if (!res.ok) return;
+
+  const users = await res.json();
+  const me = await getConnectedUser();
+  const list = document.getElementById("user-list");
+  list.innerHTML = "<h3>Utilisateurs :</h3>";
+
+  users
+    .filter((u) => u.id !== me.id)
+    .forEach((user) => {
+      const btn = document.createElement("button");
+      btn.innerHTML = `${user.nickname} ${user.online ? "🟢" : "⚪"}`;
+      btn.addEventListener("click", () => openChatWith(user));
+      list.appendChild(btn);
+    });
+}
+async function updateUserSidebar() {
+  try {
+    const res = await fetch("/users/status");
+    if (!res.ok) throw new Error("Erreur serveur");
+    const users = await res.json();
+
+    const ul = document.getElementById("user-sidebar-list");
+    ul.innerHTML = "";
+
+    users.forEach((u) => {
+      const li = document.createElement("li");
+      li.textContent = `${u.nickname} ${u.online ? "🟢" : "⚪"}`;
+      ul.appendChild(li);
+    });
+  } catch (err) {
+    console.error("Impossible de charger les utilisateurs", err);
+  }
 }

@@ -60,4 +60,28 @@ func InitDB(path string) {
 		log.Fatal("Erreur création table comments :", err)
 	}
 
+	createMessageTable := `
+	CREATE TABLE IF NOT EXISTS messages (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	expediteur TEXT,
+	recepteur TEXT,
+	message TEXT,
+	date TEXT,
+	statut TEXT CHECK(statut IN ('lu', 'non lu'))
+	);`
+	_, err = DB.Exec(createMessageTable)
+	if err != nil {
+		log.Fatal("Erreur création table messages:", err)
+	}
+
+	_, err = DB.Exec(`
+	CREATE TABLE IF NOT EXISTS sessions (
+	user_id TEXT PRIMARY KEY,
+	last_seen TEXT
+	);
+	`)
+	if err != nil {
+		log.Fatal("Erreur création table sessions :", err)
+	}
+
 }
