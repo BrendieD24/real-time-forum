@@ -4,11 +4,17 @@ import (
 	"log"
 	"net/http"
 	"real-time-forum/db"
+	"real-time-forum/service"
 )
 
 func main() {
 	db.InitDB("forum.db")
 
-	log.Println("Serveur sur http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	r := service.SetupRoutes()
+
+	log.Println("Serveur démarré sur http://localhost:8080")
+	err := http.ListenAndServe(":8080", r)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

@@ -7,3 +7,10 @@ type Message struct {
 	Content    string `json:"Content"`
 	CreatedAt  string `json:"CreatedAt"`
 }
+type MessageDisplay struct {
+	SenderID   string
+	ReceiverID string
+	Content    string
+	CreatedAt  string
+	SenderName string
+}
