@@ -16,7 +16,17 @@
     <button id="toggle-theme">
       <span id="theme-icon">🌞</span>
     </button>
+  
+  <!-- Navigation -->
+    <div class="nav-buttons">
+      <button id="message" onclick="showSection('messagerie')">Messagerie</button>
+      <button id="register" onclick="showSection('register')">Inscription</button>
+      <button id="login" onclick="showSection('login')">Connexion</button>
+      <button id="createPostBtn" onclick="showSection('create-post')">Créer un post</button>
+      <button id="logoutBtn" style="display: none;">Se déconnecter</button>
+    </div>
   </div>
+
   <div class="main-layout">
     <!-- 🧍 Barre latérale -->
     <aside id="user-sidebar">
@@ -24,16 +34,6 @@
       <ul id="user-sidebar-list"></ul>
     </aside>
   </div>
-  
-  <!-- Navigation -->
-  <div class="nav-buttons">
-    <button id="message" onclick="showSection('messagerie')">Messagerie</button>
-    <button id="register" onclick="showSection('register')">Inscription</button>
-    <button id="login" onclick="showSection('login')">Connexion</button>
-    <button id="createPostBtn" onclick="showSection('create-post')">Créer un post</button>
-    <button id="logoutBtn" style="display: none;">Se déconnecter</button>
-  </div>
-
   <!-- Section : Inscription -->
   <div id="section-register" class="section" style="display:none">
     <h2>Inscription</h2>
