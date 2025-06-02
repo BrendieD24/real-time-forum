@@ -7,6 +7,8 @@ body {
     display: flex;
     text-align: center;
     margin-top: 80px;  
+    justify-content: center;
+    min-height: 50vh;
 }
 button {
     background-color: #61a598;
@@ -18,6 +20,9 @@ input {
     width: 100%;
 }
 .header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: fixed;
     top: 0;
     left: 50%;
@@ -46,7 +51,7 @@ input {
         padding: 20px;
         font-size: 2em;
     }
-    .forum-container {
+    #section-posts {
         width: 80%;
         margin: 20px auto;
         padding: 20px;
@@ -123,16 +128,20 @@ input {
 
 .dark-mode {
     background-color: #06212c;
+    
     .header {
         color: rgb(255, 255, 255);
         text-align: center;
         padding: 20px;
         font-size: 2em;
     }
-    .forum-container {
-        width: 80%;
+    #section-posts.section{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 50vh;
+        width: 50%;
         margin: 20px auto;
-        padding: 20px;
         background: #61a598;
         border: 5px solid #000000;
         box-shadow: 10px 10px 0px #000000;
@@ -200,51 +209,63 @@ input {
         background-color: #06212c;
         border-radius: 20px;
     }
-    #register{
-        background-color: #61a598;
-        border-radius: 20px;
-        border: 2px solid #000000;
+    #section-register.section{
+        bottom: 15%;
+        min-height: 50vh;
+        width: 50%;
+        margin: 20px auto;
+        background: #61a598;
+        border: 5px solid #000000;
+        box-shadow: 10px 10px 0px #000000;
+
+        #register{
+            background-color: #61a598;
+            border-radius: 20px;
+            border: 2px solid #000000;
+        }
+        #reg-nickname{
+            background-color: #61a598;
+            border-radius: 20px;
+            border: 2px solid #000000;
+        }
+        #reg-password{
+            background-color: #61a598;
+            border-radius: 20px;
+            border: 2px solid #000000;
+        }
+        #reg-email{
+            background-color: #61a598;
+            border-radius: 20px;
+            border: 2px solid #000000;
+        }
+        #reg-firstname{
+            background-color: #61a598;
+            border-radius: 20px;
+            border: 2px solid #000000;
+        }
+        #reg-lastname{
+            background-color: #61a598;
+            border-radius: 20px;
+            border: 2px solid #000000;
+        }
+        #reg-age{
+            background-color: #61a598;
+            border-radius: 20px;
+            border: 2px solid #000000;
+        }
+        #reg-gender{
+            background-color: #61a598;
+            border-radius: 20px;
+            border: 2px solid #000000;
+        }
+        #registerBtn{
+            background-color: #61a598;
+            border-radius: 20px;
+            border: 2px solid #000000;
+        }
     }
-    #reg-nickname{
-        background-color: #61a598;
-        border-radius: 20px;
-        border: 2px solid #000000;
-    }
-    #reg-password{
-        background-color: #61a598;
-        border-radius: 20px;
-        border: 2px solid #000000;
-    }
-    #reg-email{
-        background-color: #61a598;
-        border-radius: 20px;
-        border: 2px solid #000000;
-    }
-    #reg-firstname{
-        background-color: #61a598;
-        border-radius: 20px;
-        border: 2px solid #000000;
-    }
-    #reg-lastname{
-        background-color: #61a598;
-        border-radius: 20px;
-        border: 2px solid #000000;
-    }
-    #reg-age{
-        background-color: #61a598;
-        border-radius: 20px;
-        border: 2px solid #000000;
-    }
-    #reg-gender{
-        background-color: #61a598;
-        border-radius: 20px;
-        border: 2px solid #000000;
-    }
-    #registerBtn{
-        background-color: #61a598;
-        border-radius: 20px;
-        border: 2px solid #000000;
-    }
+    
+    
     #login{  
            background-color: #61a598;
           border-radius: 20px;

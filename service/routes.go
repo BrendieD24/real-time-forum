@@ -27,14 +27,15 @@ func SetupRoutes() *mux.Router {
 	// 👤 Utilisateurs
 	r.HandleFunc("/users/all", handlers.GetAllUsersHandler).Methods("GET")
 	r.HandleFunc("/users", handlers.GetUsersStatusHandler).Methods("GET")
+	r.HandleFunc("/users/status", handlers.GetUserStatusHandler).Methods("GET")
 
 	// 📬 Messages privés
 	r.HandleFunc("/messages", handlers.CreateMessageHandler).Methods("POST")
 	r.HandleFunc("/messages", handlers.GetMessagesHandler).Methods("GET")
 
-	// 🔌 WebSockets
-	r.HandleFunc("/ws/status", handlers.UserStatusWebSocket)
-	r.HandleFunc("/ws/chat", handlers.ChatWebSocket)
+	// // 🔌 WebSockets
+	// r.HandleFunc("/ws/status", handlers.UserStatusWebSocket)
+	// r.HandleFunc("/ws/chat", handlers.ChatWebSocket)
 
 	// 🌐 Fichiers statiques (HTML/CSS/JS)
 	fs := http.FileServer(http.Dir("./static"))

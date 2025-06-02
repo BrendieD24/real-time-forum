@@ -3,16 +3,18 @@ let refreshUsersInterval;
 function showSection(sectionId) {
   const sections = document.querySelectorAll(".section");
   sections.forEach((sec) => {
-    sec.style.display = sec.id === `section-${sectionId}` ? "block" : "none";
+    sec.style.display = "none"; // tout cacher
   });
 
-  // 🟢 Si on va dans la messagerie → charger les utilisateurs et activer le refresh
-  if (sectionId === "messagerie") {
-    loadUsersForChat();
-    refreshUsersInterval = setInterval(loadUsersForChat, 5000); // toutes les 10s
-  } else {
-    // Sinon → on arrête le rafraîchissement
-    clearInterval(refreshUsersInterval);
+  const target = document.getElementById(`section-${sectionId}`);
+  if (target) {
+    target.style.display = "block"; // afficher la bonne section
+  }
+
+  // Optionnel : cacher la liste des posts
+  const postList = document.getElementById("post-list");
+  if (postList && sectionId !== "posts") {
+    postList.style.display = "none";
   }
 }
 

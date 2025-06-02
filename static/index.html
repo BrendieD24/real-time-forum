@@ -23,6 +23,7 @@
       <button id="register" onclick="showSection('register')">Inscription</button>
       <button id="login" onclick="showSection('login')">Connexion</button>
       <button id="createPostBtn" onclick="showSection('create-post')">Créer un post</button>
+      <button onclick="showSection('posts')">Voir les posts</button>
       <button id="logoutBtn" style="display: none;">Se déconnecter</button>
     </div>
   </div>
@@ -76,7 +77,7 @@
     <div id="post-msg"></div>
   </div>
   <!-- 💬 Forum -->
-  <div class="forum-container">
+  <div id="section-posts" class="section">
     <div id="post-list"></div>
     <div id="post-detail" style="display: none;"></div>
   </div>
