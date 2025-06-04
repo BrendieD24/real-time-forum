@@ -33,9 +33,9 @@ func SetupRoutes() *mux.Router {
 	r.HandleFunc("/messages", handlers.CreateMessageHandler).Methods("POST")
 	r.HandleFunc("/messages", handlers.GetMessagesHandler).Methods("GET")
 
-	// // 🔌 WebSockets
-	// r.HandleFunc("/ws/status", handlers.UserStatusWebSocket)
-	// r.HandleFunc("/ws/chat", handlers.ChatWebSocket)
+	// 🔌 WebSockets
+	r.HandleFunc("/ws/status", handlers.UserStatusWebSocket)
+	r.HandleFunc("/ws/chat", handlers.ChatWebSocket)
 
 	// 🌐 Fichiers statiques (HTML/CSS/JS)
 	fs := http.FileServer(http.Dir("./static"))
