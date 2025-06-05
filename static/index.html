@@ -8,6 +8,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Honk&family=Manrope:wght@200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=VT323&display=swap" rel="stylesheet" />
   <title>Forum Pop Art</title>
+  <script src="./javaSrcipt/chat.js" type="module"></script>
+  <script src="./javaSrcipt/auth.js" type="module"></script>
+  <script src="./javaSrcipt/comments.js" type="module"></script>
+  <script src="./javaSrcipt/connection.js" type="module"></script>
+  <script src="./javaSrcipt/message.js" type="module"></script>
+  <script src="./javaSrcipt/page.js" type="module"></script>
+  <script src="./javaSrcipt/posts.js" type="module"></script>
+  <script src="./javaSrcipt/user.js" type="module"></script>
+  <script src="./javaSrcipt/ws.js" type="module"></script>
 </head>
   
 <body>
@@ -19,11 +28,11 @@
   
   <!-- Navigation -->
     <div class="nav-buttons">
-      <button id="message" onclick="showSection('messagerie')">Messagerie</button>
-      <button id="register" onclick="showSection('register')">Inscription</button>
-      <button id="login" onclick="showSection('login')">Connexion</button>
-      <button id="createPostBtn" onclick="showSection('create-post')">Créer un post</button>
-      <button onclick="showSection('posts')">Voir les posts</button>
+      <button id="message" onClick="showSection('messagerie')">Messagerie</button>
+      <button id="register" >Inscription</button>
+      <button id="login" >Connexion</button>
+      <button id="createPostBtn" onClick="showSection('create-post')">Créer un post</button>
+      <button id="posts" onClick="showSection('posts')">Voir les posts</button>
       <button id="logoutBtn" style="display: none;">Se déconnecter</button>
     </div>
   </div>
@@ -76,20 +85,21 @@
     <button id="postBtn">Publier</button>
     <div id="post-msg"></div>
   </div>
-  <!-- 💬 Forum -->
+  <!-- 💬 posts -->
   <div id="section-posts" class="section">
     <div id="post-list"></div>
-    <div id="post-detail" style="display: none;"></div>
+    <div id="post-detail" style="display: block;"></div>
   </div>
   <!-- Liste des utilisateurs-->
   <div id="user-list"></div>
 
   <div id="app"></div>
-
-  <script src="/javaSrcipt/chat.js"></script>
-  <script src="/javaSrcipt/connection.js"></script>
-  <script src="/javaSrcipt/message.js"></script>
-  <script src="/javaSrcipt/page.js"></script>
-  <script src="/javaSrcipt/script.js"></script>
+  <!-- <script type="module">
+    import { showSection } from "./javaSrcipt/posts.js";
+    
+    document.querySelector("#register").addEventListener("click", () => {
+      showSection("register");
+    });
+  </script> -->
 </body>
 </html>
