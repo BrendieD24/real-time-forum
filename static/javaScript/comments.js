@@ -22,4 +22,5 @@ async function loadComments(postID, ulElement) {
     li.textContent = `${c.Author} (${c.CreatedAt}) : ${c.Content}`;
     ulElement.appendChild(li);
   });
+  document.getElementById("post-detail").style.display = "block";
 }

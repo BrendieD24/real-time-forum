@@ -1,5 +1,6 @@
 import { updateUserSidebar } from "./user.js";
 import { getConnectedUser } from "./connection.js";
+import { handleUserLoggedIn } from "./connection.js";
 let refreshUsersInterval;
 
 export function showSection(sectionId) {
@@ -18,6 +19,7 @@ export function showSection(sectionId) {
   if (postList && sectionId !== "posts") {
     postList.style.display = "none";
   }
+  loadPosts(); // Charger les posts à chaque changement de section
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -40,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     loadPosts();
   });
-  document.getElementById("postBtn").addEventListener("click", async () => {
+  document.getElementById("posts").addEventListener("click", async () => {
     const title = document.getElementById("post-title").value.trim();
     const content = document.getElementById("post-content").value.trim();
     const category = document.getElementById("post-category").value;
@@ -58,8 +60,8 @@ document.addEventListener("DOMContentLoaded", () => {
       body: JSON.stringify({
         Title: title,
         Content: content,
-        Category: category,
-      }),
+        Category: category
+      })
     });
 
     const msg = await res.text();
@@ -69,6 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (res.ok) {
       document.getElementById("post-title").value = "";
       document.getElementById("post-content").value = "";
+      showSection("posts");
       loadPosts();
     }
   });
@@ -108,7 +111,7 @@ async function loadPosts() {
     });
   });
 }
-async function showPostDetail(post) {
+export async function showPostDetail(post) {
   const user = await getConnectedUser();
 
   const detail = document.getElementById("post-detail");
@@ -157,8 +160,8 @@ async function showPostDetail(post) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           PostID: post.ID,
-          Content: text,
-        }),
+          Content: text
+        })
       });
 
       const txt = await res.text();
@@ -191,4 +194,35 @@ async function showPostDetail(post) {
   detail.appendChild(commentSection);
 
   document.getElementById("post-list").style.display = "none";
+  loadPosts(
+    div.addEventListener("click", () => {
+      showPostDetail(post);
+    })
+  );
+}
+export async function loadComments(postID, ulElement) {
+  ulElement.innerHTML = "";
+
+  const res = await fetch(`/comments/all?post=${postID}`);
+  if (!res.ok) {
+    ulElement.innerHTML =
+      "<li>Erreur lors du chargement des commentaires.</li>";
+    return;
+  }
+
+  let comments = [];
+  try {
+    comments = await res.json();
+    if (!Array.isArray(comments)) throw new Error("Format inattendu");
+  } catch (err) {
+    ulElement.innerHTML = "<li>Impossible de lire les commentaires.</li>";
+    return;
+  }
+
+  comments.forEach((c) => {
+    const li = document.createElement("li");
+    li.textContent = `${c.Author} (${c.CreatedAt}) : ${c.Content}`;
+    ulElement.appendChild(li);
+  });
+  document.getElementById("post-detail").style.display = "block";
 }

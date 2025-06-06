@@ -32,3 +32,4 @@ updateIcon();
 toggleButton.addEventListener("click", updateIcon);
 
 //---------------------------------Fin-----------------------------------//
+import { loadPosts, showPostDetail } from "./posts.js";

@@ -8,15 +8,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Honk&family=Manrope:wght@200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=VT323&display=swap" rel="stylesheet" />
   <title>Forum Pop Art</title>
-  <script src="./javaSrcipt/chat.js" type="module"></script>
-  <script src="./javaSrcipt/auth.js" type="module"></script>
-  <script src="./javaSrcipt/comments.js" type="module"></script>
-  <script src="./javaSrcipt/connection.js" type="module"></script>
-  <script src="./javaSrcipt/message.js" type="module"></script>
-  <script src="./javaSrcipt/page.js" type="module"></script>
-  <script src="./javaSrcipt/posts.js" type="module"></script>
-  <script src="./javaSrcipt/user.js" type="module"></script>
-  <script src="./javaSrcipt/ws.js" type="module"></script>
+  <script src="./javaScript/chat.js" type="module"></script>
+  <script src="./javaScript/auth.js" type="module"></script>
+  <script src="./javaScript/comments.js" type="module"></script>
+  <script src="./javaScript/connection.js" type="module"></script>
+  <script src="./javaScript/message.js" type="module"></script>
+  <script src="./javaScript/page.js" type="module"></script>
+  <script src="./javaScript/posts.js" type="module"></script>
+  <script src="./javaScript/user.js" type="module"></script>
+  <script src="./javaScript/ws.js" type="module"></script>
 </head>
   
 <body>
@@ -87,19 +87,12 @@
   </div>
   <!-- 💬 posts -->
   <div id="section-posts" class="section">
-    <div id="post-list"></div>
+    <div id="post-list" class="section"></div>
     <div id="post-detail" style="display: block;"></div>
   </div>
   <!-- Liste des utilisateurs-->
   <div id="user-list"></div>
 
   <div id="app"></div>
-  <!-- <script type="module">
-    import { showSection } from "./javaSrcipt/posts.js";
-    
-    document.querySelector("#register").addEventListener("click", () => {
-      showSection("register");
-    });
-  </script> -->
 </body>
 </html>

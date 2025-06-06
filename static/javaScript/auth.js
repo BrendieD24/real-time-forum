@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("register").addEventListener("click", async () => {
+  document.getElementById("registerBtn").addEventListener("click", async () => {
     const nickname = document.getElementById("reg-nickname").value.trim();
     const email = document.getElementById("reg-email").value.trim();
     const password = document.getElementById("reg-password").value.trim();
@@ -55,14 +55,14 @@ document.addEventListener("DOMContentLoaded", () => {
       FirstName: firstname,
       LastName: lastname,
       Age: parseInt(age),
-      Gender: gender,
+      Gender: gender
     };
 
     try {
       const res = await fetch("/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+        body: JSON.stringify(body)
       });
 
       const msg = await res.text();
@@ -71,6 +71,35 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       msgBox.innerText = "Erreur réseau";
       msgBox.style.color = "black";
+    }
+  });
+  // Connexion
+  document.getElementById("loginBtn")?.addEventListener("click", async () => {
+    const identifier = document.getElementById("login-id").value.trim();
+    const password = document.getElementById("login-pwd").value.trim();
+    const msg = document.getElementById("login-msg");
+
+    if (!identifier || !password) {
+      msg.textContent = "Veuillez remplir les champs.";
+      msg.style.color = "red";
+      return;
+    }
+
+    try {
+      const res = await fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ Identifier: identifier, Password: password })
+      });
+
+      const text = await res.text();
+      msg.textContent = text;
+      msg.style.color = res.ok ? "green" : "red";
+
+      if (res.ok) location.reload(); // Recharge la page pour afficher les bonnes sections
+    } catch (err) {
+      msg.textContent = "Erreur réseau.";
+      msg.style.color = "red";
     }
   });
 });
