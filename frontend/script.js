@@ -1,3 +1,5 @@
+import { loadUserList } from "./chat.js";
+
 function showSection(sectionId) {
   const sections = document.querySelectorAll(".section");
   sections.forEach((sec) => {
@@ -25,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     loadPosts();
   });
+  loadUserList();
 
   document.getElementById("registerBtn").addEventListener("click", async () => {
     const nickname = document.getElementById("reg-nickname").value.trim();
@@ -82,14 +85,14 @@ document.addEventListener("DOMContentLoaded", () => {
       FirstName: firstname,
       LastName: lastname,
       Age: parseInt(age),
-      Gender: gender,
+      Gender: gender
     };
 
     try {
       const res = await fetch("/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+        body: JSON.stringify(body)
       });
 
       const msg = await res.text();
@@ -105,13 +108,13 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("loginBtn").addEventListener("click", async () => {
     const body = {
       Identifier: document.getElementById("login-id").value,
-      Password: document.getElementById("login-pwd").value,
+      Password: document.getElementById("login-pwd").value
     };
 
     const res = await fetch("/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
+      body: JSON.stringify(body)
     });
 
     const msgBox = document.getElementById("login-msg");
@@ -142,8 +145,8 @@ document.addEventListener("DOMContentLoaded", () => {
       body: JSON.stringify({
         Title: title,
         Content: content,
-        Category: category,
-      }),
+        Category: category
+      })
     });
 
     const msg = await res.text();
@@ -285,8 +288,8 @@ async function showPostDetail(post) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           PostID: post.ID,
-          Content: text,
-        }),
+          Content: text
+        })
       });
 
       const txt = await res.text();
@@ -345,3 +348,42 @@ async function loadComments(postID, ulElement) {
     ulElement.appendChild(li);
   });
 }
+
+const ws = new WebSocket("ws://localhost:8080/ws/chat");
+
+ws.onopen = () => {
+  console.log("✅ WebSocket chat ouvert");
+};
+
+ws.onmessage = (event) => {
+  const msg = JSON.parse(event.data);
+  console.log("📩 Message reçu :", msg);
+  // Ici tu peux l'ajouter à la liste de messages sur la page
+};
+
+ws.onclose = () => {
+  console.log("❌ WebSocket fermé");
+};
+
+// Envoi d'un message :
+function sendMessage(content) {
+  ws.send(
+    JSON.stringify({
+      ReceiverID: "xxx", // optionnel si privé
+      Content: content
+    })
+  );
+}
+
+users.forEach((user) => {
+  const li = document.createElement("li");
+  const btn = document.createElement("button");
+  btn.textContent = `${user.nickname} (${user.id})`;
+  btn.addEventListener("click", () => {
+    // Ouvre la messagerie avec cet utilisateur
+    showSection("messagerie");
+    openChatWith(user.id, user.nickname); // ← ta fonction de chat
+  });
+  li.appendChild(btn);
+  document.getElementById("user-list").appendChild(li);
+});

@@ -75,8 +75,21 @@
   </div>
 
   <div id="app"></div>
+  <h2>Utilisateurs :</h2>
+  <div id="user-list"></div>
+  
+  <div id="private-chat" style="display:none;">
+    <h3 id="private-chat-title">Chat privé</h3>
+    <input id="private-message" placeholder="Votre message" />
+    <button id="send-message">Envoyer</button>
+    <ul id="private-messages"></ul>
+  </div>
+  
 
-  <script src="script.js"></script>
-  <script src="page.js"></script>
+  <script type="module" src="script.js"></script>
+  <script type="module" src="app.js"></script>
+  <script type="module" src="page.js"></script>
+  <script type="module" src="chat.js"></script>
+
 </body>
 </html>
