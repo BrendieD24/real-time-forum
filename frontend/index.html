@@ -19,11 +19,25 @@
 
   <!-- Navigation -->
   <div class="nav-buttons">
-    <button id="register" onclick="showSection('register')">Inscription</button>
-    <button id="login" onclick="showSection('login')">Connexion</button>
-    <button id="createPostBtn" onclick="showSection('create-post')">Créer un post</button>
-    <button id="logoutBtn" style="display: none;">Se déconnecter</button>
+    <button id="btnRegister">Inscription</button>
+    <button id="btnLogin">Connexion</button>
+    <button id="btnPosts">Forum</button>
+    <button id="createPostBtn" style="display:none;">Créer un post</button>
+    <button id="logoutBtn" style="display:none;">Se déconnecter</button>
   </div>
+ 
+  <div class="main-layout">
+    <aside id="user-sidebar" class="user-sidebar">
+      <h3>Contacts</h3>
+      <ul id="user-list"></ul>
+    </aside>
+
+    <main class="main-content">
+      <!-- ta section posts + reste du contenu ici -->
+       <div id="post-list" class="forum-container"></div>
+    </main>
+  </div>
+
 
   <!-- Section : Inscription -->
   <div id="section-register" class="section" style="display:none">
@@ -73,23 +87,16 @@
     <div id="post-detail" style="display: none;"></div>
 
   </div>
+  <h3 id="private-chat-title" style="display:none">Chat privé</h3>
+  <ul id="private-messages" style="display:none"></ul>
+  <input type="text" id="private-message-input" placeholder="Votre message" style="display:none;" />
+  <button id="send-private-message" style="display:none;">Envoyer</button>
 
-  <div id="app"></div>
-  <h2>Utilisateurs :</h2>
-  <div id="user-list"></div>
   
-  <div id="private-chat" style="display:none;">
-    <h3 id="private-chat-title">Chat privé</h3>
-    <input id="private-message" placeholder="Votre message" />
-    <button id="send-message">Envoyer</button>
-    <ul id="private-messages"></ul>
-  </div>
-  
-
-  <script type="module" src="script.js"></script>
-  <script type="module" src="app.js"></script>
   <script type="module" src="page.js"></script>
-  <script type="module" src="chat.js"></script>
+  <script type="module" src="app.js"></script>
+
+ 
 
 </body>
 </html>

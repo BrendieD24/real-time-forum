@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"real-time-forum/db"
 	"real-time-forum/models"
+	"real-time-forum/utils"
 
 	"github.com/google/uuid"
-	"golang.org/x/crypto/bcrypt"
 )
 
 func RegisterHandler(w http.ResponseWriter, r *http.Request) {
@@ -23,10 +23,23 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
-	user.ID = uuid.New().String()
-	user.Password = string(hashedPassword)
+	// Validation de l'email
+	if !utils.IsValidEmail(user.Email) {
+		http.Error(w, "Email invalide", http.StatusBadRequest)
+		return
+	}
 
+	// Hash du mot de passe
+	hashedPassword, err := utils.HashPassword(user.Password)
+	if err != nil {
+		http.Error(w, "Erreur hash mot de passe", http.StatusInternalServerError)
+		return
+	}
+
+	user.ID = uuid.New().String()
+	user.Password = hashedPassword
+
+	// Insert en base
 	stmt, err := db.DB.Prepare(`
 	INSERT INTO users(id, nickname, firstname, lastname, age, gender, email, password)
 	VALUES (?, ?, ?, ?, ?, ?, ?, ?)
@@ -35,14 +48,16 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Erreur SQL", http.StatusInternalServerError)
 		return
 	}
+	defer stmt.Close()
+
 	_, err = stmt.Exec(user.ID, user.Nickname, user.FirstName, user.LastName, user.Age, user.Gender, user.Email, user.Password)
 	if err != nil {
 		http.Error(w, "Erreur enregistrement", http.StatusInternalServerError)
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte("Inscription réussie"))
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"message": "Inscription réussie"})
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
@@ -55,13 +70,13 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		Identifier string
 		Password   string
 	}
-	// Décodage du JSON de la requête
+
 	if err := json.NewDecoder(r.Body).Decode(&creds); err != nil {
 		http.Error(w, "Erreur JSON", http.StatusBadRequest)
 		return
 	}
 
-	// Récupération de l'ID et du mot de passe hashé correspondant à l'identifiant (nickname ou email)
+	// Récupérer hash du user
 	row := db.DB.QueryRow("SELECT id, password FROM users WHERE nickname = ? OR email = ?", creds.Identifier, creds.Identifier)
 
 	var id, hashed string
@@ -70,22 +85,23 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Comparaison du mot de passe en clair avec le hash stocké
-	if err := bcrypt.CompareHashAndPassword([]byte(hashed), []byte(creds.Password)); err != nil {
+	// Vérifier le mot de passe
+	if !utils.CheckPasswordHash(creds.Password, hashed) {
 		http.Error(w, "Mot de passe incorrect", http.StatusUnauthorized)
 		return
 	}
 
-	// Si tout est OK, définir le cookie avec l'ID de l'utilisateur
+	// Login OK → poser cookie session_id
 	http.SetCookie(w, &http.Cookie{
 		Name:     "session_id",
 		Value:    id,
 		Path:     "/",
 		HttpOnly: true,
-		Secure:   false, // Mets true en production avec HTTPS
+		Secure:   false, // true si HTTPS
 	})
 
-	w.Write([]byte("Connexion réussie"))
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"message": "Connexion réussie"})
 }
 
 func MeHandler(w http.ResponseWriter, r *http.Request) {
@@ -95,8 +111,8 @@ func MeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// On récupère les infos de l'utilisateur
 	row := db.DB.QueryRow("SELECT id, nickname, firstname, lastname, email FROM users WHERE id = ?", userID)
+
 	var user struct {
 		ID        string `json:"id"`
 		Nickname  string `json:"nickname"`
@@ -104,8 +120,8 @@ func MeHandler(w http.ResponseWriter, r *http.Request) {
 		LastName  string `json:"lastname"`
 		Email     string `json:"email"`
 	}
-	err = row.Scan(&user.ID, &user.Nickname, &user.FirstName, &user.LastName, &user.Email)
-	if err != nil {
+
+	if err := row.Scan(&user.ID, &user.Nickname, &user.FirstName, &user.LastName, &user.Email); err != nil {
 		http.Error(w, "Utilisateur introuvable", http.StatusInternalServerError)
 		return
 	}
@@ -113,6 +129,7 @@ func MeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(user)
 }
+
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     "session_id",
@@ -121,5 +138,7 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		MaxAge:   -1, // supprime le cookie
 		HttpOnly: true,
 	})
-	w.Write([]byte("Déconnecté"))
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"message": "Déconnecté"})
 }

@@ -32,3 +32,51 @@ updateIcon();
 toggleButton.addEventListener("click", updateIcon);
 
 //---------------------------------Fin-----------------------------------//
+export function showSection(sectionId) {
+  const sections = document.querySelectorAll(".section");
+  sections.forEach((sec) => {
+    sec.style.display = sec.id === `section-${sectionId}` ? "block" : "none";
+  });
+}
+
+export function handleUserLoggedIn(user) {
+  const loginSection = document.getElementById("section-login");
+  const registerSection = document.getElementById("section-register");
+  const createPostSection = document.getElementById("section-create-post");
+  const createPostBtn = document.getElementById("createPostBtn");
+
+  if (loginSection) loginSection.style.display = "none";
+  if (registerSection) registerSection.style.display = "none";
+  if (createPostSection) createPostSection.style.display = "none";
+  if (createPostBtn) createPostBtn.style.display = "inline-block";
+
+  // Masquer boutons login/inscription
+  const loginBtn = document.querySelector(
+    "button[onclick=\"showSection('login')\"]"
+  );
+  const registerBtn = document.querySelector(
+    "button[onclick=\"showSection('register')\"]"
+  );
+
+  if (loginBtn) loginBtn.style.display = "none";
+  if (registerBtn) registerBtn.style.display = "none";
+
+  // Afficher bouton déconnexion
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (logoutBtn) {
+    logoutBtn.style.display = "inline-block";
+    logoutBtn.addEventListener("click", async () => {
+      await fetch("/logout");
+      location.reload();
+    });
+  }
+
+  // Message de bienvenue avec le nickname
+  const header = document.querySelector(".header");
+  if (header && !document.getElementById("welcome-msg")) {
+    const welcome = document.createElement("span");
+    welcome.id = "welcome-msg";
+    welcome.textContent = ` 👋 Salut, ${user.nickname}`;
+    header.appendChild(welcome);
+  }
+}
