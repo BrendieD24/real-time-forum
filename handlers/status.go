@@ -76,8 +76,14 @@ func UserStatusWebSocket(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// Marquer offline
 	userConnMutex.Lock()
-	delete(UserConnections, userID)
+	UserConnections[userID] = conn
 	userConnMutex.Unlock()
+
+	defer func() {
+		userConnMutex.Lock()
+		delete(UserConnections, userID)
+		userConnMutex.Unlock()
+	}()
+
 }

@@ -3,6 +3,7 @@ import { register, login, getConnectedUser } from "./auth.js";
 import { loadPosts } from "./posts.js";
 import { loadUserSidebar } from "./user.js";
 import { sendPrivateMessage } from "./chat.js";
+import { openStatusWebSocket } from "./ws.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   // Boutons de navigation
@@ -31,10 +32,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // Chargement des posts au démarrage
   loadPosts();
   loadUserSidebar();
+  openStatusWebSocket();
   setInterval(loadUserSidebar, 10000); // refresh auto toutes les 10 sec
   document
     .getElementById("send-private-message")
     .addEventListener("click", sendPrivateMessage);
+
   // Vérifie si user est connecté → met à jour l'interface
   getConnectedUser().then((user) => {
     if (user) {
