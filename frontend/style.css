@@ -14,9 +14,9 @@ body {
         font-size: 2em;
     }
     .forum-container {
-        width: 80%;
-        margin: 20px auto;
+        min-width: 500px;
         padding: 20px;
+        flex: 1;
         background: #5bebd3;
         border: 5px solid #000000;
         box-shadow: 10px 10px 0px #000000;
@@ -234,7 +234,7 @@ body {
     border-radius: 20px;
     border: 2px solid #000000;
 }
-#section-create-post{
+#section-create-post, .section{
     background-color: #61a598;
     color: black;
     padding: 1rem;
@@ -273,17 +273,18 @@ body {
     background-color: #61a598;
     border-radius: 20px;
 }
-#createPostBtn {
+#createPostBtn,#logoutBtn, #btnPosts, #btnLogin, #btnRegister{
+    padding: 4px 8px;
     background-color: #61a598;
     border-radius: 20px;
 }
-#logoutBtn {
-    background-color: #61a598;
-    border-radius: 20px;
+
+.main-layout{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+
 }
-
-
-
 
 
 
@@ -326,6 +327,8 @@ body {
 
 .user-sidebar {
   width: 220px;
+  height: fit-content;
+  margin-top: 1rem;
   background-color: #f9f9f9;
   border-right: 1px solid #ccc;
   padding: 10px;

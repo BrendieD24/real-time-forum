@@ -1,3 +1,5 @@
+import { showSection } from './page.js';
+import { showUserSidebar } from './user.js';
 import { openStatusWebSocket } from './ws.js';
 
 export async function register() {
@@ -91,7 +93,10 @@ export async function login() {
   if (res.ok) {
     const user = await getConnectedUser();
     if (user) {
+      console.log('Utilisateur connecté de merde :', user);
       openStatusWebSocket();
+      showSection('posts');
+      showUserSidebar();
       import('./page.js').then(({ handleUserLoggedIn }) => {
         handleUserLoggedIn(user);
       });

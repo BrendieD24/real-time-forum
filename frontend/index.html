@@ -6,95 +6,106 @@
     <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Honk&family=Manrope:wght@200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=VT323&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Honk&family=Manrope:wght@200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=VT323&display=swap"
+      rel="stylesheet"
+    />
     <title>Forum Pop Art</title>
   </head>
-<body>
-  <div class="header">
-    FORUM
-    <button id="toggle-theme">
-      <span id="theme-icon">🌞</span>
-    </button>
-  </div>
-  
-  <!-- Navigation -->
-  <div class="nav-buttons">
-    <button id="btnRegister">Inscription</button>
-    <button id="btnLogin">Connexion</button>
-    <button id="btnPosts">Forum</button>
-    <button id="createPostBtn" style="display:none;">Créer un post</button>
-    <button id="logoutBtn" style="display:none;">Se déconnecter</button>
-  </div>
-  
-  <div class="main-layout">
-    <div class="chat-container">
-      <h3 id="private-chat-title" style="display:none">Chat privé</h3>
-      <ul id="private-messages" style="display:none"></ul>
-      <input type="text" id="private-message-input" placeholder="Votre message" style="display:none;" />
-      <button id="send-private-message" style="display:none;">Envoyer</button>
-  </div>
-    <!-- Section : Créer un post -->
-    <div id="section-create-post" class="section" style="display:none">
-      
-      <h2>Créer un Post</h2>
-      <input type="text" id="post-title" placeholder="Titre" />
-      <textarea id="post-content" placeholder="Contenu du post"></textarea>
-      <select id="post-category">
-        <option value="général">Général</option>
-        <option value="questions">Questions</option>
-        <option value="infos">Infos</option>
-      </select>
-      <button id="postBtn">Publier</button>
-      <div id="post-msg"></div>
-    </div>
-    <!-- Section : Connexion -->
-    <div id="section-login" class="section" style="display:none">
-      <h2>Connexion</h2>
-      <input type="text" id="login-id" placeholder="Pseudo ou Email" />
-      <input type="password" id="login-pwd" placeholder="Mot de passe" />
-      <button id="loginBtn">Se connecter</button>
-      <div id="login-msg"></div>
-    </div>
-    <!-- Section : Inscription -->
-    <div id="section-register" class="section" style="display:none">
-      <h2>Inscription</h2>
-      <input type="text" id="reg-nickname" placeholder="Pseudo" />
-      <input type="text" id="reg-email" placeholder="Email" />
-      <input type="password" id="reg-password" placeholder="Mot de passe" />
-      <input type="text" id="reg-firstname" placeholder="Prénom" />
-      <input type="text" id="reg-lastname" placeholder="Nom" />
-      <input type="number" id="reg-age" placeholder="Âge" min="0" oninput="this.value = Math.max(this.value, 0)" />
-      <select id="reg-gender">
-        <option value="male">Homme</option>
-        <option value="female">Femme</option>
-        <option value="other">Autre</option>
-      </select>
-      <button id="registerBtn">S'inscrire</button>
-      <div id="register-msg"></div>
+  <body>
+    <div class="header">
+      FORUM
+      <button id="toggle-theme">
+        <span id="theme-icon">🌞</span>
+      </button>
     </div>
 
-    <aside id="user-sidebar" class="user-sidebar">
-      <h3>Contacts</h3>
-      <ul id="user-list"></ul>
-    </aside>  
-    
-    <main class="main-content">
+    <!-- Navigation -->
+    <div class="nav-buttons">
+      <button id="btnRegister">Inscription</button>
+      <button id="btnLogin">Connexion</button>
+      <button id="btnPosts" style="display: none">Forum</button>
+      <button id="createPostBtn" style="display: none">Créer un post</button>
+      <button id="logoutBtn" style="display: none">Se déconnecter</button>
+    </div>
+
+    <div class="main-layout">
+      <aside id="user-sidebar" class="user-sidebar" style="display: none">
+        <h3>Contacts</h3>
+        <ul id="user-list">
+          Chargement en cours...
+        </ul>
+      </aside>
+
+      <div
+        id="section-chat"
+        class="chat-container section"
+        style="display: none"
+      >
+        <h3 id="private-chat-title" style="display: none">Chat privé</h3>
+        <ul id="private-messages" style="display: none"></ul>
+        <input
+          type="text"
+          id="private-message-input"
+          placeholder="Votre message"
+          style="display: none"
+        />
+        <button id="send-private-message" style="display: none">Envoyer</button>
+      </div>
+      <!-- Section : Créer un post -->
+      <div id="section-create-post" class="section" style="display: none">
+        <h2>Créer un Post</h2>
+        <input type="text" id="post-title" placeholder="Titre" />
+        <textarea id="post-content" placeholder="Contenu du post"></textarea>
+        <select id="post-category">
+          <option value="général">Général</option>
+          <option value="questions">Questions</option>
+          <option value="infos">Infos</option>
+        </select>
+        <button id="postBtn">Publier</button>
+        <div id="post-msg"></div>
+      </div>
+      <!-- Section : Connexion -->
+      <div id="section-login" class="section" style="display: none">
+        <h2>Connexion</h2>
+        <form id="login-form">
+          <input type="text" id="login-id" placeholder="Pseudo ou Email" />
+          <input type="password" id="login-pwd" placeholder="Mot de passe" />
+          <button id="loginBtn">Se connecter</button>
+        </form>
+        <div id="login-msg"></div>
+      </div>
+      <!-- Section : Inscription -->
+      <div id="section-register" class="section" style="display: none">
+        <h2>Inscription</h2>
+        <form id="register-form">
+          <input type="text" id="reg-nickname" placeholder="Pseudo" />
+          <input type="text" id="reg-email" placeholder="Email" />
+          <input type="password" id="reg-password" placeholder="Mot de passe" />
+          <input type="text" id="reg-firstname" placeholder="Prénom" />
+          <input type="text" id="reg-lastname" placeholder="Nom" />
+          <input
+            type="number"
+            id="reg-age"
+            placeholder="Âge"
+            min="0"
+            oninput="this.value = Math.max(this.value, 0)"
+          />
+          <select id="reg-gender">
+            <option value="male">Homme</option>
+            <option value="female">Femme</option>
+            <option value="other">Autre</option>
+          </select>
+          <button id="registerBtn">S'inscrire</button>
+        </form>
+        <div id="register-msg"></div>
+      </div>
+
       <!-- ta section posts + reste du contenu ici -->
-      <div id="post-list" class="forum-container"></div>
-    </main>  
-  </div>  
+      <div id="section-posts" class="forum-container section"></div>
+    </div>
 
-  <!-- Liste des posts -->
-  <div class="forum-container">
-    <div id="post-list"></div>
-    <div id="post-detail" style="display: none;"></div>
-
-  </div>
-  
-  <script type="module" src="page.js"></script>
-  <script type="module" src="app.js"></script>
-
- 
-
-</body>
+    <script type="module" src="page.js"></script>
+    <script type="module" src="app.js"></script>
+  </body>
 </html>
