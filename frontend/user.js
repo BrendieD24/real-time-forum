@@ -18,7 +18,7 @@ export async function loadUserSidebar() {
       // Point vert ou gris
       const dot = document.createElement("span");
       dot.classList.add("status-dot");
-      dot.style.backgroundColor = user.Online ? "green" : "gray";
+      dot.style.backgroundColor = user.Online ? "green" : "red";
 
       const nickname = document.createElement("span");
       nickname.textContent = user.Nickname;

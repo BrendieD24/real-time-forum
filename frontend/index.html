@@ -27,44 +27,44 @@
   </div>
  
   <div class="main-layout">
+    <!-- Section : Connexion -->
+    <div id="section-login" class="section" style="display:none">
+      <h2>Connexion</h2>
+      <input type="text" id="login-id" placeholder="Pseudo ou Email" />
+      <input type="password" id="login-pwd" placeholder="Mot de passe" />
+      <button id="loginBtn">Se connecter</button>
+      <div id="login-msg"></div>
+    </div>
+    <!-- Section : Inscription -->
+    <div id="section-register" class="section" style="display:none">
+      <h2>Inscription</h2>
+      <input type="text" id="reg-nickname" placeholder="Pseudo" />
+      <input type="text" id="reg-email" placeholder="Email" />
+      <input type="password" id="reg-password" placeholder="Mot de passe" />
+      <input type="text" id="reg-firstname" placeholder="Prénom" />
+      <input type="text" id="reg-lastname" placeholder="Nom" />
+      <input type="number" id="reg-age" placeholder="Âge" min="0" oninput="this.value = Math.max(this.value, 0)" />
+      <select id="reg-gender">
+        <option value="male">Homme</option>
+        <option value="female">Femme</option>
+        <option value="other">Autre</option>
+      </select>
+      <button id="registerBtn">S'inscrire</button>
+      <div id="register-msg"></div>
+    </div>
+
     <aside id="user-sidebar" class="user-sidebar">
       <h3>Contacts</h3>
       <ul id="user-list"></ul>
-    </aside>
-
+    </aside>  
+    
     <main class="main-content">
       <!-- ta section posts + reste du contenu ici -->
-       <div id="post-list" class="forum-container"></div>
-    </main>
-  </div>
+      <div id="post-list" class="forum-container"></div>
+    </main>  
+  </div>  
 
 
-  <!-- Section : Inscription -->
-  <div id="section-register" class="section" style="display:none">
-    <h2>Inscription</h2>
-    <input type="text" id="reg-nickname" placeholder="Pseudo" />
-    <input type="text" id="reg-email" placeholder="Email" />
-    <input type="password" id="reg-password" placeholder="Mot de passe" />
-    <input type="text" id="reg-firstname" placeholder="Prénom" />
-    <input type="text" id="reg-lastname" placeholder="Nom" />
-    <input type="number" id="reg-age" placeholder="Âge" min="0" oninput="this.value = Math.max(this.value, 0)" />
-    <select id="reg-gender">
-      <option value="male">Homme</option>
-      <option value="female">Femme</option>
-      <option value="other">Autre</option>
-    </select>
-    <button id="registerBtn">S'inscrire</button>
-    <div id="register-msg"></div>
-  </div>
-
-  <!-- Section : Connexion -->
-  <div id="section-login" class="section" style="display:none">
-    <h2>Connexion</h2>
-    <input type="text" id="login-id" placeholder="Pseudo ou Email" />
-    <input type="password" id="login-pwd" placeholder="Mot de passe" />
-    <button id="loginBtn">Se connecter</button>
-    <div id="login-msg"></div>
-  </div>
 
   <!-- Section : Créer un post -->
   <div id="section-create-post" class="section" style="display:none">
