@@ -1,4 +1,4 @@
-import { showSection } from './page.js';
+import { showSection } from "./page.js";
 
 let chatSocket = null;
 let currentReceiverID = null;
@@ -9,24 +9,24 @@ export function openPrivateChat(userID, nickname) {
   console.log(`Ouverture du chat avec ${nickname} (ID: ${userID})`);
 
   currentReceiverID = userID;
-  showSection('chat');
+  showSection("chat");
 
   // Met à jour le titre du chat
-  const chatTitle = document.getElementById('private-chat-title');
+  const chatTitle = document.getElementById("private-chat-title");
   if (chatTitle) {
     chatTitle.textContent = `Chat avec ${nickname}`;
-    chatTitle.style.display = 'block';
+    chatTitle.style.display = "block";
   }
 
   // Vide la liste de messages
-  const list = document.getElementById('private-messages');
-  list.innerHTML = '';
-  list.style.display = 'block';
+  const list = document.getElementById("private-messages");
+  list.innerHTML = "";
+  list.style.display = "block";
 
   // Affiche l'input + bouton
-  document.getElementById('private-message-input').style.display = 'block';
-  document.getElementById('send-private-message').style.display =
-    'inline-block';
+  document.getElementById("private-message-input").style.display = "block";
+  document.getElementById("send-private-message").style.display =
+    "inline-block";
 
   // Ouvre le WebSocket si besoin
   openChatWebSocket();
@@ -51,7 +51,7 @@ function openChatWebSocket() {
     chatSocket.close();
   }
 
-  chatSocket = new WebSocket('ws://localhost:8080/ws/chat');
+  chatSocket = new WebSocket("ws://localhost:8080/ws/chat");
 
   chatSocket.onopen = () => {
     console.log("WebSocket chat ouvert");
@@ -66,7 +66,7 @@ function openChatWebSocket() {
   };
 
   chatSocket.onclose = () => {
-    console.log('WebSocket chat fermé');
+    console.log("WebSocket chat fermé");
     chatSocket = null;
 
     // Tentative de reconnexion après un délai
@@ -78,14 +78,14 @@ function openChatWebSocket() {
   };
 
   chatSocket.onmessage = (event) => {
-    console.log('Message reçu :', event.data);
+    console.log("Message reçu :", event.data);
     loadMessages(currentReceiverID); // Rafraîchir les messages
   };
 }
 
 // Envoie un message privé
 export function sendPrivateMessage() {
-  const input = document.getElementById('private-message-input');
+  const input = document.getElementById("private-message-input");
   const text = input.value.trim();
 
   if (!text || !currentReceiverID) return;
@@ -109,7 +109,7 @@ export function sendPrivateMessage() {
     const list = document.getElementById("private-messages");
     const li = document.createElement("li");
     li.textContent = `Vous : ${text} (en attente...)`;
-    li.style.opacity = "0.7";
+    li.style.opacity = "0.1";
     list.appendChild(li);
   } else {
     chatSocket.send(JSON.stringify(payload));
@@ -124,19 +124,42 @@ export function sendPrivateMessage() {
 async function loadMessages(userID) {
   try {
     const res = await fetch(`/messages?user=${userID}`);
-    if (!res.ok) throw new Error('Erreur lors du chargement des messages');
+    if (!res.ok) throw new Error("Erreur lors du chargement des messages");
 
     const messages = await res.json();
 
-    const list = document.getElementById('private-messages');
-    list.innerHTML = '';
+    const list = document.getElementById("private-messages");
+    list.innerHTML = "";
 
     messages.forEach((msg) => {
-      const li = document.createElement('li');
-      li.textContent = `${msg.SenderName} : ${msg.Content}`;
+      const li = document.createElement("li");
+      li.textContent = `${msg.SenderName} (${displayDateHour(
+        new Date(msg.CreatedAt)
+      )}) : ${msg.Content}`;
       list.appendChild(li);
     });
   } catch (err) {
-    console.error('Impossible de charger les messages :', err);
+    console.error("Impossible de charger les messages :", err);
+  }
+}
+function displayDateHour(date) {
+  const now = new Date();
+  if (
+    date.getDate() === now.getDate() &&
+    date.getMonth() === now.getMonth() &&
+    date.getFullYear() === now.getFullYear()
+  ) {
+    return date.toLocaleTimeString("fr-FR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  } else {
+    const day = date.getDate();
+    const month = date.toLocaleString("fr-FR", { month: "short" });
+    const time = date.toLocaleTimeString("fr-FR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    return `${day} ${month} ${time}`;
   }
 }
