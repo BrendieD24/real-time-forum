@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Honk&family=Manrope:wght@200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=VT323&display=swap" rel="stylesheet" />
-  <title>Forum Pop Art</title>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Honk&family=Manrope:wght@200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=VT323&display=swap" rel="stylesheet" />
+    <title>Forum Pop Art</title>
+  </head>
 <body>
   <div class="header">
     FORUM
@@ -16,7 +16,7 @@
       <span id="theme-icon">🌞</span>
     </button>
   </div>
-
+  
   <!-- Navigation -->
   <div class="nav-buttons">
     <button id="btnRegister">Inscription</button>
@@ -25,8 +25,28 @@
     <button id="createPostBtn" style="display:none;">Créer un post</button>
     <button id="logoutBtn" style="display:none;">Se déconnecter</button>
   </div>
- 
+  
   <div class="main-layout">
+    <div class="chat-container">
+      <h3 id="private-chat-title" style="display:none">Chat privé</h3>
+      <ul id="private-messages" style="display:none"></ul>
+      <input type="text" id="private-message-input" placeholder="Votre message" style="display:none;" />
+      <button id="send-private-message" style="display:none;">Envoyer</button>
+  </div>
+    <!-- Section : Créer un post -->
+    <div id="section-create-post" class="section" style="display:none">
+      
+      <h2>Créer un Post</h2>
+      <input type="text" id="post-title" placeholder="Titre" />
+      <textarea id="post-content" placeholder="Contenu du post"></textarea>
+      <select id="post-category">
+        <option value="général">Général</option>
+        <option value="questions">Questions</option>
+        <option value="infos">Infos</option>
+      </select>
+      <button id="postBtn">Publier</button>
+      <div id="post-msg"></div>
+    </div>
     <!-- Section : Connexion -->
     <div id="section-login" class="section" style="display:none">
       <h2>Connexion</h2>
@@ -64,34 +84,12 @@
     </main>  
   </div>  
 
-
-
-  <!-- Section : Créer un post -->
-  <div id="section-create-post" class="section" style="display:none">
-
-    <h2>Créer un Post</h2>
-    <input type="text" id="post-title" placeholder="Titre" />
-    <textarea id="post-content" placeholder="Contenu du post"></textarea>
-    <select id="post-category">
-      <option value="général">Général</option>
-      <option value="questions">Questions</option>
-      <option value="infos">Infos</option>
-    </select>
-    <button id="postBtn">Publier</button>
-    <div id="post-msg"></div>
-  </div>
-
   <!-- Liste des posts -->
   <div class="forum-container">
     <div id="post-list"></div>
     <div id="post-detail" style="display: none;"></div>
 
   </div>
-  <h3 id="private-chat-title" style="display:none">Chat privé</h3>
-  <ul id="private-messages" style="display:none"></ul>
-  <input type="text" id="private-message-input" placeholder="Votre message" style="display:none;" />
-  <button id="send-private-message" style="display:none;">Envoyer</button>
-
   
   <script type="module" src="page.js"></script>
   <script type="module" src="app.js"></script>
