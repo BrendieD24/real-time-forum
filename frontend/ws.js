@@ -1,51 +1,38 @@
 let statusWS = null;
-let statusWSInterval = null;
+let reconnectTimeout = null;
 
 export function openStatusWebSocket() {
   if (statusWS && statusWS.readyState === WebSocket.OPEN) {
     return;
   }
 
-  statusWS = new WebSocket("ws://localhost:8080/ws/status");
-
-  statusWS.onopen = () => {
-    console.log("WebSocket status ouvert");
-  };
-
-  statusWS.onclose = () => {
-    console.log("WebSocket status fermé");
-  };
-
-  statusWS.onerror = (err) => {
-    console.error("Erreur WebSocket status :", err);
-  };
-
-  // Si pas encore démarré → start interval
-  if (!statusWSInterval) {
-    statusWSInterval = setInterval(() => {
-      console.log("Refreshing WebSocket status...");
-      refreshStatusWebSocket();
-    }, 10000); // toutes les 10s
-  }
+  createStatusWebSocket();
 }
 
-function refreshStatusWebSocket() {
-  if (statusWS) {
-    statusWS.close(); // ferme l'ancien WS
-  }
-
-  // En ouvrir un nouveau :
-  statusWS = new WebSocket("ws://localhost:8080/ws/status");
+function createStatusWebSocket() {
+  statusWS = new WebSocket('ws://localhost:8080/ws/status');
 
   statusWS.onopen = () => {
-    console.log("WebSocket status rafraîchi !");
+    console.log('WebSocket status ouvert');
+    clearTimeout(reconnectTimeout); // Clear any pending reconnection attempts
   };
 
   statusWS.onclose = () => {
-    console.log("WebSocket status fermé");
+    console.log('WebSocket status fermé');
+    scheduleReconnect(); // Schedule a reconnect
   };
 
   statusWS.onerror = (err) => {
-    console.error("Erreur WebSocket status :", err);
+    console.error('Erreur WebSocket status :', err);
+    scheduleReconnect(); // Schedule a reconnect on error
   };
+}
+
+function scheduleReconnect() {
+  if (!reconnectTimeout) {
+    reconnectTimeout = setTimeout(() => {
+      console.log('Tentative de reconnexion WebSocket...');
+      createStatusWebSocket();
+    }, 5000); // Reconnect after 5 seconds
+  }
 }

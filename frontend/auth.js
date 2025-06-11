@@ -1,13 +1,15 @@
-export async function register() {
-  const nickname = document.getElementById("reg-nickname").value.trim();
-  const email = document.getElementById("reg-email").value.trim();
-  const password = document.getElementById("reg-password").value.trim();
-  const firstname = document.getElementById("reg-firstname").value.trim();
-  const lastname = document.getElementById("reg-lastname").value.trim();
-  const age = document.getElementById("reg-age").value.trim();
-  const gender = document.getElementById("reg-gender").value.trim();
+import { openStatusWebSocket } from './ws.js';
 
-  const msgBox = document.getElementById("register-msg");
+export async function register() {
+  const nickname = document.getElementById('reg-nickname').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const password = document.getElementById('reg-password').value.trim();
+  const firstname = document.getElementById('reg-firstname').value.trim();
+  const lastname = document.getElementById('reg-lastname').value.trim();
+  const age = document.getElementById('reg-age').value.trim();
+  const gender = document.getElementById('reg-gender').value.trim();
+
+  const msgBox = document.getElementById('register-msg');
 
   if (
     !nickname ||
@@ -18,29 +20,29 @@ export async function register() {
     !age ||
     !gender
   ) {
-    msgBox.innerText = "Veuillez remplir tous les champs.";
-    msgBox.style.color = "black";
+    msgBox.innerText = 'Veuillez remplir tous les champs.';
+    msgBox.style.color = 'black';
     return;
   }
 
-  if (!email.includes("@") || !email.endsWith(".com")) {
-    msgBox.innerText = "Veuillez entrer un email valide se terminant par .com";
-    msgBox.style.color = "black";
+  if (!email.includes('@') || !email.endsWith('.com')) {
+    msgBox.innerText = 'Veuillez entrer un email valide se terminant par .com';
+    msgBox.style.color = 'black';
     return;
   }
 
   const nameRegex = /^[A-Za-zÀ-ÿ\s\-]+$/;
   if (!nameRegex.test(firstname) || !nameRegex.test(lastname)) {
     msgBox.innerText =
-      "Prénom et nom ne doivent pas contenir de caractères spéciaux";
-    msgBox.style.color = "black";
+      'Prénom et nom ne doivent pas contenir de caractères spéciaux';
+    msgBox.style.color = 'black';
     return;
   }
 
   const parsedAge = parseInt(age);
   if (isNaN(parsedAge) || parsedAge < 10) {
     msgBox.innerText = "Vous n'avez pas l'âge légal pour vous inscrire.";
-    msgBox.style.color = "black";
+    msgBox.style.color = 'black';
     return;
   }
 
@@ -51,45 +53,46 @@ export async function register() {
     FirstName: firstname,
     LastName: lastname,
     Age: parsedAge,
-    Gender: gender
+    Gender: gender,
   };
 
   try {
-    const res = await fetch("/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
+    const res = await fetch('/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
     });
 
     const msg = await res.text();
     msgBox.innerText = msg;
-    msgBox.style.color = res.ok ? "pink" : "black";
+    msgBox.style.color = res.ok ? 'pink' : 'black';
   } catch (err) {
-    msgBox.innerText = "Erreur réseau";
-    msgBox.style.color = "black";
+    msgBox.innerText = 'Erreur réseau';
+    msgBox.style.color = 'black';
   }
 }
 
 export async function login() {
   const body = {
-    Identifier: document.getElementById("login-id").value,
-    Password: document.getElementById("login-pwd").value
+    Identifier: document.getElementById('login-id').value,
+    Password: document.getElementById('login-pwd').value,
   };
 
-  const res = await fetch("/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body)
+  const res = await fetch('/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
   });
 
-  const msgBox = document.getElementById("login-msg");
+  const msgBox = document.getElementById('login-msg');
   msgBox.innerText = await res.text();
-  msgBox.style.color = res.ok ? "pink" : "black";
+  msgBox.style.color = res.ok ? 'pink' : 'black';
 
   if (res.ok) {
     const user = await getConnectedUser();
     if (user) {
-      import("./page.js").then(({ handleUserLoggedIn }) => {
+      openStatusWebSocket();
+      import('./page.js').then(({ handleUserLoggedIn }) => {
         handleUserLoggedIn(user);
       });
     }
@@ -97,10 +100,10 @@ export async function login() {
 }
 
 export async function getConnectedUser() {
-  const res = await fetch("/me");
+  const res = await fetch('/me');
   if (!res.ok) return null;
 
   const user = await res.json();
-  console.log("Utilisateur connecté :", user);
+  console.log('Utilisateur connecté :', user);
   return user;
 }
