@@ -4,6 +4,7 @@ import { loadPosts } from './posts.js';
 import { loadUserSidebar, showUserSidebar } from './user.js';
 import { sendPrivateMessage } from './chat.js';
 import { openStatusWebSocket } from './ws.js';
+import { createPost } from './posts.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Boutons de navigation
@@ -32,6 +33,12 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('login-form').addEventListener('submit', (e) => {
     e.preventDefault(); // Empêche le rechargement de la page
   });
+  document
+    .getElementById('create-post-form')
+    .addEventListener('submit', (e) => {
+      e.preventDefault(); // Empêche le rechargement de la page
+      createPost();
+    });
 
   // Bouton login
   document.getElementById('loginBtn').addEventListener('click', login);

@@ -55,14 +55,16 @@
       <!-- Section : Créer un post -->
       <div id="section-create-post" class="section" style="display: none">
         <h2>Créer un Post</h2>
-        <input type="text" id="post-title" placeholder="Titre" />
-        <textarea id="post-content" placeholder="Contenu du post"></textarea>
-        <select id="post-category">
-          <option value="général">Général</option>
-          <option value="questions">Questions</option>
-          <option value="infos">Infos</option>
-        </select>
-        <button id="postBtn">Publier</button>
+        <form id="create-post-form">
+          <input type="text" id="post-title" placeholder="Titre" />
+          <textarea id="post-content" placeholder="Contenu du post"></textarea>
+          <select id="post-category">
+            <option value="général">Général</option>
+            <option value="questions">Questions</option>
+            <option value="infos">Infos</option>
+          </select>
+          <button id="postBtn">Publier</button>
+        </form>
         <div id="post-msg"></div>
       </div>
       <!-- Section : Connexion -->
@@ -102,7 +104,12 @@
       </div>
 
       <!-- ta section posts + reste du contenu ici -->
-      <div id="section-posts" class="forum-container section"></div>
+      <div
+        id="section-posts"
+        class="forum-container section"
+        style="display: none"
+      ></div>
+      <div class="section" id="section-post-detail" style="display: none"></div>
     </div>
 
     <script type="module" src="page.js"></script>

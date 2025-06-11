@@ -21,6 +21,26 @@ body {
         border: 5px solid #000000;
         box-shadow: 10px 10px 0px #000000;
     }
+    #section-post-detail{
+        flex: 1;
+    }
+
+   #section-login, #section-register{
+        display: flex;
+        gap: 16px;
+        h2{
+            font-size: 2rem;
+            text-align: center;
+        }
+        form{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            input, select, button{
+                padding: 0.5rem;
+            }
+        }
+    }
     .thread-header {
         margin: 0 auto;
         padding: 10px;
@@ -117,29 +137,14 @@ body {
         justify-content: space-between;
         align-items: center;
     }
-    .thread-title {
+    .thread-title, .thread-author {
         padding: 10px;
         margin: 0;
         font-size: 1em;
         color: #ffffff;
     }
-    .thread-author {
-        padding: 10px;
-        margin: 0;
-        font-size: 1em;
-        color: #ffffff;
-    }
-    .thread-content {
-        margin: 0 auto;
-        padding: 10px;
-        background: #394442;
-        border: 3px solid #000000;
-        border-radius: 10px;
-        margin: 0;
-        font-size: 1em;
-        color: #ffffff;
-    }
-    .thread-date {
+
+    .thread-content , .thread-date,.thread-action{
         margin: 0 auto;
         padding: 10px;
         background: #394442;
@@ -150,14 +155,6 @@ body {
         color: #ffffff;
     }
     .thread-action {
-        margin: 0 auto;
-        padding: 10px;
-        background: #394442;
-        border: 3px solid #000000;
-        border-radius: 10px;
-        margin: 0;
-        font-size: 1em;
-        color: #ffffff;
         font-family:VT323; 
     }
     .thread-action:hover{
@@ -169,71 +166,13 @@ body {
     }
    
 }
- #register{
+
+input,select, button{
     background-color: #61a598;
     border-radius: 20px;
     border: 2px solid #000000;
 }
-#reg-nickname{
-    background-color: #61a598;
-    border-radius: 20px;
-    border: 2px solid #000000;
-}
-#reg-password{
-    background-color: #61a598;
-    border-radius: 20px;
-    border: 2px solid #000000;
-}
-#reg-email{
-    background-color: #61a598;
-    border-radius: 20px;
-    border: 2px solid #000000;
-}
-#reg-firstname{
-    background-color: #61a598;
-    border-radius: 20px;
-    border: 2px solid #000000;
-}
-#reg-lastname{
-    background-color: #61a598;
-    border-radius: 20px;
-    border: 2px solid #000000;
-}
-#reg-age{
-    background-color: #61a598;
-    border-radius: 20px;
-    border: 2px solid #000000;
-}
-#reg-gender{
-    background-color: #61a598;
-    border-radius: 20px;
-    border: 2px solid #000000;
-}
-#registerBtn{
-    background-color: #61a598;
-    border-radius: 20px;
-    border: 2px solid #000000;
-}
-#login{  
-       background-color: #61a598;
-      border-radius: 20px;
-      border: 2px solid #000000;
-}
-#login-id{
-    background-color: #61a598;
-    border-radius: 20px;
-    border: 2px solid #000000;
-}
-#login-pwd{
-    background-color: #61a598;
-    border-radius: 20px;
-    border: 2px solid #000000;
-}
-#loginBtn{
-    background-color: #61a598;
-    border-radius: 20px;
-    border: 2px solid #000000;
-}
+
 #section-create-post, .section{
     background-color: #61a598;
     color: black;
@@ -242,35 +181,17 @@ body {
     border-radius: 10px;
     margin: 1rem;
 }
-#post-title {
+#post-title ,#post-content ,#post-category{
     background-color: #86c2b7;
-    width: 100%;
     padding: 0.5rem;
     border: 1px solid #000000;
     border-radius: 5px;
     margin-bottom: 1rem;
     font-size: 1.2rem;
 }
-#post-content {
-    background-color: #86c2b7;
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #000000;
-    border-radius: 5px;
-    margin-bottom: 1rem;
-    font-size: 1rem;
-}
-#post-category {
-    background-color: #86c2b7;
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #000000;
-    border-radius: 5px;
-    margin-bottom: 1rem;
-    font-size: 1rem;
-}
 #postBtn {
     background-color: #61a598;
+    padding: 1rem;
     border-radius: 20px;
 }
 #createPostBtn,#logoutBtn, #btnPosts, #btnLogin, #btnRegister{
@@ -278,21 +199,18 @@ body {
     background-color: #61a598;
     border-radius: 20px;
 }
-
+#create-post-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
 .main-layout{
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 1rem;
 
 }
-
-
-
-
-
-
-
-
 
 .comments {
     margin-top: 1rem;

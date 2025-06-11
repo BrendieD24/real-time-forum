@@ -1,6 +1,13 @@
 import { getConnectedUser } from './auth.js';
+import { showSection } from './page.js';
 
 export async function loadPosts() {
+  //Verifie si l'utilisateur est connecté
+  const user = await getConnectedUser();
+  if (!user) {
+    showSection('login');
+    return;
+  }
   const res = await fetch('/posts/all');
   const posts = await res.json();
   const container = document.getElementById('section-posts');
@@ -33,6 +40,7 @@ export async function loadPosts() {
 
     container.appendChild(div);
 
+    showSection('posts');
     div.addEventListener('click', () => {
       showPostDetail(post);
     });
@@ -42,15 +50,13 @@ export async function loadPosts() {
 export async function showPostDetail(post) {
   const user = await getConnectedUser();
 
-  const detail = document.getElementById('post-detail');
+  const detail = document.getElementById('section-post-detail');
   detail.innerHTML = '';
-  detail.style.display = 'block';
 
   const backBtn = document.createElement('button');
   backBtn.textContent = '← Retour';
   backBtn.addEventListener('click', () => {
-    detail.style.display = 'none';
-    document.getElementById('post-list').style.display = 'block';
+    showSection('posts');
   });
 
   const title = document.createElement('h2');
@@ -119,7 +125,7 @@ export async function showPostDetail(post) {
   detail.appendChild(document.createElement('hr'));
   detail.appendChild(commentSection);
 
-  document.getElementById('post-list').style.display = 'none';
+  showSection('post-detail');
 }
 
 export async function loadComments(postID, ulElement) {
@@ -146,4 +152,44 @@ export async function loadComments(postID, ulElement) {
     li.textContent = `${c.Author} (${c.CreatedAt}) : ${c.Content}`;
     ulElement.appendChild(li);
   });
+}
+
+export async function createPost() {
+  // Vérification si l'utilisateur est connecté
+  const user = await getConnectedUser();
+  if (!user) {
+    alert('Vous devez être connecté pour créer un post.');
+    showSection('login');
+    return;
+  }
+  const title = document.getElementById('post-title').value.trim();
+  const category = document.getElementById('post-category').value.trim();
+  const content = document.getElementById('post-content').value.trim();
+
+  // Vérification des champs
+  if (!title || !category || !content) {
+    alert('Veuillez remplir tous les champs.');
+    return;
+  }
+
+  const res = await fetch('/posts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      Title: title,
+      Category: category,
+      Content: content,
+    }),
+  });
+
+  if (res.ok) {
+    document.getElementById('post-title').value = '';
+    document.getElementById('post-category').value = '';
+    document.getElementById('post-content').value = '';
+    loadPosts();
+    showSection('posts');
+  } else {
+    const msg = await res.text();
+    alert(`Erreur lors de la création du post : ${msg}`);
+  }
 }

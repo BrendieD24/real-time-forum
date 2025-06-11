@@ -1,6 +1,7 @@
 import { showSection } from './page.js';
 import { showUserSidebar } from './user.js';
 import { openStatusWebSocket } from './ws.js';
+import { loadPosts } from './posts.js';
 
 export async function register() {
   const nickname = document.getElementById('reg-nickname').value.trim();
@@ -97,6 +98,7 @@ export async function login() {
       openStatusWebSocket();
       showSection('posts');
       showUserSidebar();
+      loadPosts();
       import('./page.js').then(({ handleUserLoggedIn }) => {
         handleUserLoggedIn(user);
       });
