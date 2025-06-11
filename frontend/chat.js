@@ -2,6 +2,7 @@ import { showSection } from './page.js';
 
 let chatSocket = null;
 let currentReceiverID = null;
+let messageQueue = []; // File d'attente pour les messages à envoyer
 
 // Ouvre un chat privé
 export function openPrivateChat(userID, nickname) {
@@ -40,15 +41,40 @@ function openChatWebSocket() {
     return; // déjà ouvert
   }
 
+  // Si une connexion existe mais n'est pas ouverte, la fermer
+  if (chatSocket) {
+    chatSocket.close();
+  }
+
+  // Si une connexion existe mais n'est pas ouverte, la fermer
+  if (chatSocket) {
+    chatSocket.close();
+  }
+
   chatSocket = new WebSocket('ws://localhost:8080/ws/chat');
 
   chatSocket.onopen = () => {
-    console.log('WebSocket chat ouvert');
+    console.log("WebSocket chat ouvert");
+    // Envoyer les messages en file d'attente
+    while (messageQueue.length > 0) {
+      const message = messageQueue.shift();
+      chatSocket.send(JSON.stringify(message));
+
+      // Après avoir envoyé un message depuis la file d'attente, rafraîchir les messages
+      loadMessages(currentReceiverID);
+    }
   };
 
   chatSocket.onclose = () => {
     console.log('WebSocket chat fermé');
     chatSocket = null;
+
+    // Tentative de reconnexion après un délai
+    setTimeout(() => {
+      if (currentReceiverID) {
+        openChatWebSocket();
+      }
+    }, 2000);
   };
 
   chatSocket.onmessage = (event) => {
@@ -65,7 +91,7 @@ export function sendPrivateMessage() {
   if (!text || !currentReceiverID) return;
 
   if (!chatSocket || chatSocket.readyState !== WebSocket.OPEN) {
-    console.error('WebSocket pas prêt');
+    console.error("WebSocket pas prêt");
     return;
   }
 
@@ -74,8 +100,24 @@ export function sendPrivateMessage() {
     content: text,
   };
 
-  chatSocket.send(JSON.stringify(payload));
-  input.value = ''; // Clear input
+  if (!chatSocket || chatSocket.readyState !== WebSocket.OPEN) {
+    console.log("WebSocket pas prêt, mise en file d'attente du message");
+    messageQueue.push(payload);
+    openChatWebSocket(); // Tenter d'ouvrir ou réouvrir la connexion
+
+    // Simuler l'affichage immédiat du message pour l'utilisateur
+    const list = document.getElementById("private-messages");
+    const li = document.createElement("li");
+    li.textContent = `Vous : ${text} (en attente...)`;
+    li.style.opacity = "0.7";
+    list.appendChild(li);
+  } else {
+    chatSocket.send(JSON.stringify(payload));
+    // Rafraîchir les messages immédiatement pour l'expéditeur
+    loadMessages(currentReceiverID);
+  }
+
+  input.value = ""; // Clear input
 }
 
 // Charge l'historique des messages

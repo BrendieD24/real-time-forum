@@ -59,5 +59,20 @@ func InitDB(path string) {
 	if err != nil {
 		log.Fatal("Erreur création table comments :", err)
 	}
+	// Create the messages table
+	createMessageTable:=`
+	CREATE TABLE IF NOT EXISTS messages (
+	id TEXT PRIMARY KEY,
+	sender_id TEXT,
+	receiver_id TEXT,
+	content TEXT,
+	created_at TEXT,
+	FOREIGN KEY(sender_id) REFERENCES users(id),
+	FOREIGN KEY(receiver_id) REFERENCES users(id)
+	);`
+	_, err = DB.Exec(createMessageTable)
+	if err != nil {
+		log.Fatal("Erreur création table comments :", err)
+	}
 
 }
