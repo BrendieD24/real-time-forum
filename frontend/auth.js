@@ -94,7 +94,6 @@ export async function login() {
   if (res.ok) {
     const user = await getConnectedUser();
     if (user) {
-      console.log('Utilisateur connecté de merde :', user);
       openStatusWebSocket();
       showSection('posts');
       showUserSidebar();
