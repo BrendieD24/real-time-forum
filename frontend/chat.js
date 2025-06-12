@@ -1,8 +1,13 @@
 import { showSection } from "./page.js";
+import {
+  openStatusWebSocket,
+  sendChatMessage,
+  setOnChatMessageCallback,
+  isConnected,
+} from "./ws.js";
 
-let chatSocket = null;
 let currentReceiverID = null;
-let messageQueue = []; // File d'attente pour les messages à envoyer
+let messageQueue = []; // Garde la file d'attente pour compatibilité
 
 // Ouvre un chat privé
 export function openPrivateChat(userID, nickname) {
@@ -28,59 +33,23 @@ export function openPrivateChat(userID, nickname) {
   document.getElementById("send-private-message").style.display =
     "inline-block";
 
+  // Définir le callback pour rafraîchir les messages quand on reçoit un message
+  setOnChatMessageCallback(() => {
+    if (currentReceiverID) {
+      loadMessages(currentReceiverID);
+    }
+  });
+
   // Ouvre le WebSocket si besoin
-  openChatWebSocket();
+  openStatusWebSocket();
 
   // Charge l'historique
   loadMessages(userID);
 }
 
-// Ouvre le WebSocket de chat privé
-function openChatWebSocket() {
-  if (chatSocket && chatSocket.readyState === WebSocket.OPEN) {
-    return; // déjà ouvert
-  }
-
-  // Si une connexion existe mais n'est pas ouverte, la fermer
-  if (chatSocket) {
-    chatSocket.close();
-  }
-
-  // Si une connexion existe mais n'est pas ouverte, la fermer
-  if (chatSocket) {
-    chatSocket.close();
-  }
-
-  chatSocket = new WebSocket("ws://localhost:8080/ws/chat");
-
-  chatSocket.onopen = () => {
-    console.log("WebSocket chat ouvert");
-    // Envoyer les messages en file d'attente
-    while (messageQueue.length > 0) {
-      const message = messageQueue.shift();
-      chatSocket.send(JSON.stringify(message));
-
-      // Après avoir envoyé un message depuis la file d'attente, rafraîchir les messages
-      loadMessages(currentReceiverID);
-    }
-  };
-
-  chatSocket.onclose = () => {
-    console.log("WebSocket chat fermé");
-    chatSocket = null;
-
-    // Tentative de reconnexion après un délai
-    setTimeout(() => {
-      if (currentReceiverID) {
-        openChatWebSocket();
-      }
-    }, 2000);
-  };
-
-  chatSocket.onmessage = (event) => {
-    console.log("Message reçu :", event.data);
-    loadMessages(currentReceiverID); // Rafraîchir les messages
-  };
+// Fonction qui remplace openChatWebSocket (plus utilisée directement)
+function ensureWebSocketConnection() {
+  openStatusWebSocket();
 }
 
 // Envoie un message privé
@@ -90,29 +59,18 @@ export function sendPrivateMessage() {
 
   if (!text || !currentReceiverID) return;
 
-  if (!chatSocket || chatSocket.readyState !== WebSocket.OPEN) {
-    console.error("WebSocket pas prêt");
-    return;
-  }
+  const messageSent = sendChatMessage(currentReceiverID, text);
 
-  const payload = {
-    receiver_id: currentReceiverID,
-    content: text,
-  };
-
-  if (!chatSocket || chatSocket.readyState !== WebSocket.OPEN) {
+  if (!messageSent) {
     console.log("WebSocket pas prêt, mise en file d'attente du message");
-    messageQueue.push(payload);
-    openChatWebSocket(); // Tenter d'ouvrir ou réouvrir la connexion
 
     // Simuler l'affichage immédiat du message pour l'utilisateur
     const list = document.getElementById("private-messages");
     const li = document.createElement("li");
     li.textContent = `Vous : ${text} (en attente...)`;
-    li.style.opacity = "0.1";
+    li.style.opacity = "0.7";
     list.appendChild(li);
   } else {
-    chatSocket.send(JSON.stringify(payload));
     // Rafraîchir les messages immédiatement pour l'expéditeur
     loadMessages(currentReceiverID);
   }
@@ -142,6 +100,7 @@ async function loadMessages(userID) {
     console.error("Impossible de charger les messages :", err);
   }
 }
+
 function displayDateHour(date) {
   const now = new Date();
   if (
