@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"database/sql"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -33,6 +34,12 @@ var upgrader = websocket.Upgrader{
 // GET /users/status
 func GetUserStatusHandler(w http.ResponseWriter, r *http.Request) {
 	statuses := make([]models.UserStatus, 0)
+	// Vérifier si l'utilisateur est connecté
+	userID, err := GetConnectedUserID(r)
+	if err != nil {
+		http.Error(w, "Non connecté", http.StatusUnauthorized)
+		return
+	}
 
 	// On récupère tous les users
 	rows, err := db.DB.Query("SELECT id, nickname FROM users")
@@ -57,6 +64,32 @@ func GetUserStatusHandler(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 
+	//Récuperer l'heure du dernier message avec chaque utilisateur avec lequel l'utilisateur a interagi
+	for i, status := range statuses {
+		if status.ID == userID {
+			// Ne pas inclure l'utilisateur lui-même dans les messages
+			statuses[i].LastMessageTime = "N/A" // Pas de message avec soi-même
+			continue
+		}
+		var lastMessageTime sql.NullString
+		err := db.DB.QueryRow(`
+			SELECT MAX(created_at)
+			FROM messages
+			WHERE (sender_id = ? AND receiver_id = ?)
+			OR (sender_id = ? AND receiver_id = ?)
+		`, userID, status.ID, status.ID, userID).Scan(&lastMessageTime)
+		if err != nil {
+			log.Printf("Erreur récupération dernier message pour %s: %v", status.ID, err)
+			statuses[i].LastMessageTime = "N/A" // Pas de message trouvé
+			continue
+		}
+
+		if lastMessageTime.Valid {
+			statuses[i].LastMessageTime = lastMessageTime.String
+		} else {
+			statuses[i].LastMessageTime = "" // Aucun message trouvé
+		}
+	}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(statuses)
 }

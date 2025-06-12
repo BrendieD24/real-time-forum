@@ -34,6 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault(); // Empêche le rechargement de la page
   });
   document
+    .getElementById('private-message-form')
+    .addEventListener('submit', (e) => {
+      e.preventDefault(); // Empêche le rechargement de la page
+    });
+  document
     .getElementById('create-post-form')
     .addEventListener('submit', (e) => {
       e.preventDefault(); // Empêche le rechargement de la page

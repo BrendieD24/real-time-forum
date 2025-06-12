@@ -33,15 +33,27 @@ func GetMessagesHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	limit := r.URL.Query().Get("limit")
+	offset := r.URL.Query().Get("offset")
+
+	// Default values for pagination
+	if limit == "" {
+		limit = "10"
+	}
+	if offset == "" {
+		offset = "0"
+	}
+
 	rows, err := db.DB.Query(`
-		SELECT u1.nickname, u2.nickname, m.content, m.created_at
-		FROM messages m
-		JOIN users u1 ON u1.id = m.sender_id
-		JOIN users u2 ON u2.id = m.receiver_id
-		WHERE (sender_id = ? AND receiver_id = ?)
-		   OR (sender_id = ? AND receiver_id = ?)
-		ORDER BY created_at ASC
-	`, userID, otherID, otherID, userID)
+        SELECT u1.nickname, u2.nickname, m.content, m.created_at
+        FROM messages m
+        JOIN users u1 ON u1.id = m.sender_id
+        JOIN users u2 ON u2.id = m.receiver_id
+        WHERE (sender_id = ? AND receiver_id = ?)
+           OR (sender_id = ? AND receiver_id = ?)
+        ORDER BY created_at DESC
+        LIMIT ? OFFSET ?
+    `, userID, otherID, otherID, userID, limit, offset)
 
 	if err != nil {
 		http.Error(w, "Erreur DB", http.StatusInternalServerError)

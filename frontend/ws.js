@@ -17,7 +17,6 @@ function createStatusWebSocket() {
   statusWS = new WebSocket('ws://localhost:8080/ws/status');
 
   statusWS.onopen = () => {
-    console.log('WebSocket status ouvert');
     clearTimeout(reconnectTimeout);
 
     // Envoi des messages en attente dans la file
@@ -28,7 +27,6 @@ function createStatusWebSocket() {
   };
 
   statusWS.onclose = () => {
-    console.log('WebSocket status fermé');
     scheduleReconnect();
   };
 
@@ -39,8 +37,6 @@ function createStatusWebSocket() {
 
   // Gestion des messages entrants
   statusWS.onmessage = (event) => {
-    console.log('Message WebSocket reçu:', event.data);
-
     try {
       const data = JSON.parse(event.data);
 

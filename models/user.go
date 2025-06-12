@@ -13,9 +13,10 @@ type User struct {
 	Password  string
 }
 type UserStatus struct {
-	ID       string `json:"ID"`
-	Nickname string `json:"Nickname"`
-	Online   bool   `json:"Online"`
+	ID              string `json:"ID"`
+	Nickname        string `json:"Nickname"`
+	Online          bool   `json:"Online"`
+	LastMessageTime string `json:"LastMessageTime,omitempty"` // Format: "2006-01-02 15:04:05"
 }
 type UserConnection struct {
 	UserID string      `json:"UserID"`

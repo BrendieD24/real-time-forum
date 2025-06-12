@@ -44,13 +44,17 @@
       >
         <h3 id="private-chat-title" style="display: none">Chat privé</h3>
         <ul id="private-messages" style="display: none"></ul>
-        <input
-          type="text"
-          id="private-message-input"
-          placeholder="Votre message"
-          style="display: none"
-        />
-        <button id="send-private-message" style="display: none">Envoyer</button>
+        <form id="private-message-form">
+          <input
+            type="text"
+            id="private-message-input"
+            placeholder="Votre message"
+            style="display: none"
+          />
+          <button id="send-private-message" style="display: none">
+            Envoyer
+          </button>
+        </form>
       </div>
       <!-- Section : Créer un post -->
       <div id="section-create-post" class="section" style="display: none">

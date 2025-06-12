@@ -6,15 +6,23 @@ export async function loadUserSidebar(userConnected) {
     if (!res.ok) throw new Error('Erreur chargement users');
 
     const users = await res.json();
-    console.log('Users sidebar :', users);
 
     const list = document.getElementById('user-list');
     list.innerHTML = '';
 
-    users.forEach((user) => {
-      console.log('User ID : ', user.ID);
-      console.log('UserConnected ID : ', userConnected.id);
+    users.sort((a, b) => {
+      // Trier par date de dernier message
+      if (a.LastMessageTime && b.LastMessageTime) {
+        return new Date(b.LastMessageTime) - new Date(a.LastMessageTime);
+      }
+      // Si l'un des utilisateurs n'a pas de dernier message, le mettre en fin de liste
+      if (a.LastMessageTime) return -1;
+      if (b.LastMessageTime) return 1;
+      // Sinon, trier par pseudo
+      return a.Nickname.localeCompare(b.Nickname);
+    });
 
+    users.forEach((user) => {
       // Ignore l'utilisateur connecté
       if (user.ID === (userConnected?.id || 0)) return;
       const li = document.createElement('li');

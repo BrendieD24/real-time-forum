@@ -110,6 +110,5 @@ export async function getConnectedUser() {
   if (!res.ok) return null;
 
   const user = await res.json();
-  console.log('Utilisateur connecté :', user);
   return user;
 }
